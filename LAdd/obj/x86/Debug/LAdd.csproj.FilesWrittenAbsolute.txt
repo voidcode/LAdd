@@ -1,0 +1,6 @@
+/home/work/workspace/LAdd/LAdd/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/work/workspace/LAdd/LAdd/obj/x86/Debug/LAdd.gtk-gui.gui.stetic
+/home/work/workspace/LAdd/LAdd/bin/Debug/LAdd.exe.mdb
+/home/work/workspace/LAdd/LAdd/bin/Debug/LAdd.exe
+/home/work/workspace/LAdd/LAdd/obj/x86/Debug/LAdd.exe
+/home/work/workspace/LAdd/LAdd/obj/x86/Debug/LAdd.exe.mdb
