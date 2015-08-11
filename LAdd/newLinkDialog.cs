@@ -1,7 +1,17 @@
 ﻿using System;
 using System.Data;
-using System.Data.SQLite;
-using System.IO; 
+using System.IO;
+#if __MonoCS__
+	using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
+	using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
+	using SQLiteDataReader = Mono.Data.Sqlite.SqliteDataReader;
+	using SQLiteException = Mono.Data.Sqlite.SqliteException;
+#else
+	using SQLiteCommand = System.Data.SQLite.SQLiteCommand;
+	using SQLiteConnection = System.Data.SQLite.SQLiteConnection;
+	using SQLiteDataReader = System.Data.SQLite.SQLiteDataReader;
+	using SQLiteException = System.Data.SQLite.SQLiteException;
+#endif
 namespace LAdd
 {
 	public partial class newLinkDialog : Gtk.Dialog

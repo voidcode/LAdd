@@ -1,8 +1,17 @@
 ﻿using System;
 using Gtk;
 using System.Data;
-using System.Data.SQLite;
-
+#if __MonoCS__
+	using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
+	using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
+	using SQLiteDataReader = Mono.Data.Sqlite.SqliteDataReader;
+	using SQLiteException = Mono.Data.Sqlite.SqliteException;
+#else
+	using SQLiteCommand = System.Data.SQLite.SQLiteCommand;
+	using SQLiteConnection = System.Data.SQLite.SQLiteConnection;
+	using SQLiteDataReader = System.Data.SQLite.SQLiteDataReader;
+	using SQLiteException = System.Data.SQLite.SQLiteException;
+#endif
 public partial class MainWindow: Gtk.Window
 {
 	String approot;
