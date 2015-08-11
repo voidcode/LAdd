@@ -1,31 +1,31 @@
 ﻿using System;
 using System.Data;
-using Mono.Data.Sqlite;
+using System.Data.SQLite;
 using System.IO; 
 namespace LAdd
 {
 	public partial class newLinkDialog : Gtk.Dialog
 	{
 		String approot;
-		SqliteConnection dbConn;
+		SQLiteConnection dbConn;
 		public newLinkDialog ()
 		{
 			this.Build ();
 			this.SetPosition (Gtk.WindowPosition.Center);
 			approot = AppDomain.CurrentDomain.BaseDirectory;
-			dbConn = new SqliteConnection ("Data Source="+approot+"LAdd.db, Version=3");
+			dbConn = new SQLiteConnection ("Data Source="+approot+"LAdd.db, Version=3");
 			fillCbFlagWithAllFlagTypes ();
 		}
 		protected void fillCbFlagWithAllFlagTypes(){
 			dbConn.Open ();
 			String getAllFlagTypesQ = "select * from FlagTypes;";
 			try {
-				SqliteCommand cmd = new SqliteCommand(getAllFlagTypesQ, dbConn);
-				SqliteDataReader reader = cmd.ExecuteReader();
+				SQLiteCommand cmd = new SQLiteCommand(getAllFlagTypesQ, dbConn);
+				SQLiteDataReader reader = cmd.ExecuteReader();
 				while(reader.Read()){
 					cbFlag.AppendText (reader["title"].ToString());
 				}
-			} catch (SqliteException e){
+			} catch (SQLiteException e){
 				Console.Write (e.ToString());
 			}
 			dbConn.Close ();
@@ -40,7 +40,7 @@ namespace LAdd
 			if (title.Length > 0 && link.Length > 0) {
 				String insertLinkQ = "insert into Links (title, link, flag) values ('"+title+"', '"+link+"', '"+flag+"');";			
 				try {
-					SqliteCommand cmd = new SqliteCommand (insertLinkQ, dbConn);
+					SQLiteCommand cmd = new SQLiteCommand (insertLinkQ, dbConn);
 					dbConn.Open ();
 					//try to insert a userdefine link.
 					if(cmd.ExecuteNonQuery() > 0){
@@ -49,7 +49,7 @@ namespace LAdd
 						labelStatus.Text = "Error: Link is NOT saved!";
 					}
 					dbConn.Close();
-				} catch (SqliteException e2){
+				} catch (SQLiteException e2){
 					Console.Write (e2.ToString ());
 				}
 

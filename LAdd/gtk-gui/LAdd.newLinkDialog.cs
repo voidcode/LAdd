@@ -161,7 +161,7 @@ namespace LAdd
 				this.Child.ShowAll ();
 			}
 			this.DefaultWidth = 260;
-			this.DefaultHeight = 234;
+			this.DefaultHeight = 255;
 			this.Show ();
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.newLinkDialog_btnClose);
 			this.buttonOk.Clicked += new global::System.EventHandler (this.newLinkDialog_btnOk);

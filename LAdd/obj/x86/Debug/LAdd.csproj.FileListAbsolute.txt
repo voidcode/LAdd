@@ -1,0 +1,17 @@
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\obj\x86\Debug\LAdd.exe
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\LAdd.exe
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\LAdd.pdb
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\Mono.Data.Sqlite.dll
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\System.Data.Portable.dll
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\System.Transactions.Portable.dll
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\obj\x86\Debug\LAdd.pdb
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\obj\x86\Debug\LAdd.csprojResolveAssemblyReference.cache
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\LAdd.exe.config
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\EntityFramework.dll
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\System.Data.SQLite.dll
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\EntityFramework.xml
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\ts\Documents\GitHub\LAdd\LAdd\bin\Debug\System.Data.SQLite.xml

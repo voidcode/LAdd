@@ -1,22 +1,20 @@
 ﻿using System;
 using Gtk;
 using System.Data;
-using Mono.Data.Sqlite;
-using System.Collections.Generic;
-using System.IO;
+using System.Data.SQLite;
 
 public partial class MainWindow: Gtk.Window
 {
 	String approot;
 	public TreeStore ts;
 	TreeView tv;
-	SqliteConnection dbConn;
+	SQLiteConnection dbConn;
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
 		buildLinksTree ();
 		approot = AppDomain.CurrentDomain.BaseDirectory;
-		dbConn = new SqliteConnection ("Data Source="+approot+"LAdd.db, Version=3");
+		dbConn = new SQLiteConnection ("Data Source="+approot+"LAdd.db");
 		fillCbSearchFieldType ();
 		fillLinksTreeFromDB ();
 	}
@@ -24,12 +22,12 @@ public partial class MainWindow: Gtk.Window
 		dbConn.Open ();
 		String getAllFlagTypesQ = "select * from FlagTypes;";
 		try {
-			SqliteCommand cmd = new SqliteCommand(getAllFlagTypesQ, dbConn);
-			SqliteDataReader reader = cmd.ExecuteReader();
+			SQLiteCommand cmd = new SQLiteCommand(getAllFlagTypesQ, dbConn);
+			SQLiteDataReader reader = cmd.ExecuteReader();
 			while(reader.Read()){
 				//fillCbSearchFieldType.AppendText (reader["title"].ToString());
 			}
-		} catch (SqliteException e){
+		} catch (SQLiteException e){
 			Console.Write (e.ToString());
 		}
 		dbConn.Close ();
@@ -52,14 +50,14 @@ public partial class MainWindow: Gtk.Window
 		//there is with join on FlagTypes Table
 		String selectAllLinksQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle from Links join FlagTypes on Links.flag = FlagTypes.flagid;";
 		try {
-			SqliteCommand cmd = new SqliteCommand(selectAllLinksQ, dbConn);
-			SqliteDataReader reader = cmd.ExecuteReader();
+			SQLiteCommand cmd = new SQLiteCommand(selectAllLinksQ, dbConn);
+			SQLiteDataReader reader = cmd.ExecuteReader();
 			ts.Clear ();
 			//append all links to TreeStore
 			while(reader.Read()){
 				ts.AppendValues(reader["title"], reader["flagTitle"], reader["Link"]);
 			}
-		} catch (SqliteException e){
+		} catch (SQLiteException e){
 			Console.Write (e.ToString());
 		}
 		dbConn.Close ();
@@ -94,17 +92,17 @@ public partial class MainWindow: Gtk.Window
 			String deleteLinkQ = "delete from Links where linkid=2";
 	
 			dbConn.Open();
-			SqliteCommand cmd = new SqliteCommand(deleteLinkQ, dbConn);
+			SQLiteCommand cmd = new SQLiteCommand(deleteLinkQ, dbConn);
 			if(cmd.ExecuteNonQuery() > 0){
 				ts.Clear();
 				//reload all links from table Links
 				dbConn.Close();
 				fillLinksTreeFromDB();
 			} else {
-				Console.WriteLine("DELETE: links with linkid=1 is delete from DB.");
+				Console.WriteLine("DE.LETE: links with linkid=1 is delete from DB.");
 			}
 			dbConn.Close();
-		} catch (SqliteException error){
+		} catch (SQLiteException error){
 			Console.Write (error.ToString());
 		}
 	}
@@ -114,16 +112,16 @@ public partial class MainWindow: Gtk.Window
 		Console.WriteLine("onSearchBtnClicked");
 		//run a db-search base on entry-text lookup link where title like input
 		String searchQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle from Links join FlagTypes on Links.flag = FlagTypes.flagid where Links.title like '%"+searchEntry.Text.ToString()+"%';";
-		SqliteCommand cmd = new SqliteCommand (searchQ, dbConn);
+		SQLiteCommand cmd = new SQLiteCommand (searchQ, dbConn);
 		try {
 			dbConn.Open();
-			SqliteDataReader reader = cmd.ExecuteReader();
+			SQLiteDataReader reader = cmd.ExecuteReader();
 			ts.Clear (); //remove all links in links-tree
 			while(reader.Read()){
 				ts.AppendValues(reader["title"], reader["flagTitle"], reader["Link"]);
 			}
 			dbConn.Close();
-		} catch (SqliteException err){
+		} catch (SQLiteException err){
 			Console.Write(err.ToString());
 		}
 	}
