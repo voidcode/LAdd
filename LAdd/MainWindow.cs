@@ -20,12 +20,14 @@ public partial class MainWindow: Gtk.Window
 	SQLiteConnection dbConn;
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
+		this.SetPosition(Gtk.WindowPosition.Center);
 		Build ();
 		buildLinksTree ();
 		approot = AppDomain.CurrentDomain.BaseDirectory;
 		dbConn = new SQLiteConnection ("Data Source="+approot+"LAdd.db");
 		fillCbSearchFieldType ();
 		fillLinksTreeFromDB ();
+		searchEntry.GrabFocus ();
 	}
 	protected void fillCbSearchFieldType(){
 		dbConn.Open ();
@@ -34,7 +36,7 @@ public partial class MainWindow: Gtk.Window
 			SQLiteCommand cmd = new SQLiteCommand(getAllFlagTypesQ, dbConn);
 			SQLiteDataReader reader = cmd.ExecuteReader();
 			while(reader.Read()){
-				//fillCbSearchFieldType.AppendText (reader["title"].ToString());
+				cbSearchFieldType.AppendText (reader["title"].ToString());
 			}
 		} catch (SQLiteException e){
 			Console.Write (e.ToString());
@@ -115,10 +117,9 @@ public partial class MainWindow: Gtk.Window
 			Console.Write (error.ToString());
 		}
 	}
-
-	protected void onSearchBtnClicked (object sender, EventArgs e)
+	protected void runLinkTreeSearch (object sender, EventArgs e)
 	{
-		Console.WriteLine("onSearchBtnClicked");
+		Console.WriteLine("runLinkTreeSearch");
 		//run a db-search base on entry-text lookup link where title like input
 		String searchQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle from Links join FlagTypes on Links.flag = FlagTypes.flagid where Links.title like '%"+searchEntry.Text.ToString()+"%';";
 		SQLiteCommand cmd = new SQLiteCommand (searchQ, dbConn);

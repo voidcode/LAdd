@@ -15,7 +15,7 @@
       </source>
     </icon-set>
   </icon-factory>
-  <widget class="Gtk.Window" id="MainWindow" design-size="276 380">
+  <widget class="Gtk.Window" id="MainWindow" design-size="266 380">
     <action-group name="Default">
       <action id="pasteAction1">
         <property name="Type">Action</property>
@@ -115,47 +115,29 @@
                         <property name="MemberName" />
                         <property name="Spacing">6</property>
                         <child>
+                          <widget class="Gtk.ComboBox" id="cbSearchFieldType">
+                            <property name="MemberName" />
+                            <property name="IsTextCombo">True</property>
+                            <property name="Items" translatable="yes" />
+                          </widget>
+                          <packing>
+                            <property name="Position">0</property>
+                            <property name="AutoSize">True</property>
+                            <property name="Expand">False</property>
+                            <property name="Fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
                           <widget class="Gtk.Entry" id="searchEntry">
                             <property name="MemberName" />
                             <property name="CanFocus">True</property>
                             <property name="IsEditable">True</property>
                             <property name="InvisibleChar">•</property>
-                            <signal name="Activated" handler="onSearchBtnClicked" />
-                            <signal name="Changed" handler="onSearchBtnClicked" />
-                          </widget>
-                          <packing>
-                            <property name="Position">0</property>
-                            <property name="AutoSize">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="Gtk.ComboBox" id="cbSearchFieldType">
-                            <property name="MemberName">cbSearchFieldType</property>
-                            <property name="IsTextCombo">True</property>
-                            <property name="Items" translatable="yes" />
+                            <signal name="Changed" handler="runLinkTreeSearch" />
                           </widget>
                           <packing>
                             <property name="Position">1</property>
                             <property name="AutoSize">True</property>
-                            <property name="Expand">False</property>
-                            <property name="Fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="Gtk.Button" id="searchBtn">
-                            <property name="MemberName" />
-                            <property name="CanFocus">True</property>
-                            <property name="Type">TextOnly</property>
-                            <property name="Label" translatable="yes">SØG</property>
-                            <property name="UseUnderline">True</property>
-                            <property name="BorderWidth">6</property>
-                            <signal name="Clicked" handler="onSearchBtnClicked" />
-                          </widget>
-                          <packing>
-                            <property name="Position">2</property>
-                            <property name="AutoSize">True</property>
-                            <property name="Expand">False</property>
-                            <property name="Fill">False</property>
                           </packing>
                         </child>
                       </widget>
@@ -191,10 +173,10 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="LAdd.newLinkDialog" design-size="260 255">
+  <widget class="Gtk.Dialog" id="LAdd.newLinkDialog" design-size="289 255">
     <property name="MemberName" />
     <property name="WindowPosition">CenterOnParent</property>
-    <property name="Buttons">2</property>
+    <property name="Buttons">3</property>
     <property name="HelpButton">False</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
@@ -326,21 +308,37 @@
         <property name="MemberName" />
         <property name="Spacing">10</property>
         <property name="BorderWidth">5</property>
-        <property name="Size">2</property>
+        <property name="Size">3</property>
         <property name="LayoutStyle">End</property>
+        <child>
+          <widget class="Gtk.Button" id="btnPasteClipboardTextIntoEntryLink">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="UseStock">True</property>
+            <property name="Type">StockItem</property>
+            <property name="StockId">gtk-paste</property>
+            <property name="ResponseId">0</property>
+            <signal name="Clicked" handler="onBtnPasteClipboardTextIntoEntryLinkClicked" />
+            <property name="label">gtk-paste</property>
+          </widget>
+          <packing>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
         <child>
           <widget class="Gtk.Button" id="buttonCancel">
             <property name="MemberName" />
             <property name="CanDefault">True</property>
             <property name="CanFocus">True</property>
-            <property name="UseStock">True</property>
-            <property name="Type">StockItem</property>
-            <property name="StockId">gtk-cancel</property>
+            <property name="Type">TextOnly</property>
+            <property name="Label" translatable="yes">_Cancel</property>
+            <property name="UseUnderline">True</property>
             <property name="ResponseId">-6</property>
             <signal name="Clicked" handler="newLinkDialog_btnClose" />
-            <property name="label">gtk-cancel</property>
           </widget>
           <packing>
+            <property name="Position">1</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
           </packing>
@@ -350,15 +348,14 @@
             <property name="MemberName" />
             <property name="CanDefault">True</property>
             <property name="CanFocus">True</property>
-            <property name="UseStock">True</property>
-            <property name="Type">StockItem</property>
-            <property name="StockId">gtk-ok</property>
+            <property name="Type">TextOnly</property>
+            <property name="Label" translatable="yes">_Save</property>
+            <property name="UseUnderline">True</property>
             <property name="ResponseId">-5</property>
             <signal name="Clicked" handler="newLinkDialog_btnOk" />
-            <property name="label">gtk-ok</property>
           </widget>
           <packing>
-            <property name="Position">1</property>
+            <property name="Position">2</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
           </packing>

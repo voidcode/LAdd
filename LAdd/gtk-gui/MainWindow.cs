@@ -31,11 +31,9 @@ public partial class MainWindow
 	
 	private global::Gtk.HBox hbox1;
 	
-	private global::Gtk.Entry searchEntry;
-	
 	private global::Gtk.ComboBox cbSearchFieldType;
 	
-	private global::Gtk.Button searchBtn;
+	private global::Gtk.Entry searchEntry;
 	
 	private global::Gtk.Label GtkLabel2;
 
@@ -103,39 +101,27 @@ public partial class MainWindow
 		this.hbox1.Name = "hbox1";
 		this.hbox1.Spacing = 6;
 		// Container child hbox1.Gtk.Box+BoxChild
+		this.cbSearchFieldType = global::Gtk.ComboBox.NewText ();
+		this.cbSearchFieldType.Name = "cbSearchFieldType";
+		this.hbox1.Add (this.cbSearchFieldType);
+		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.cbSearchFieldType]));
+		w4.Position = 0;
+		w4.Expand = false;
+		w4.Fill = false;
+		// Container child hbox1.Gtk.Box+BoxChild
 		this.searchEntry = new global::Gtk.Entry ();
 		this.searchEntry.CanFocus = true;
 		this.searchEntry.Name = "searchEntry";
 		this.searchEntry.IsEditable = true;
 		this.searchEntry.InvisibleChar = '•';
 		this.hbox1.Add (this.searchEntry);
-		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.searchEntry]));
-		w4.Position = 0;
-		// Container child hbox1.Gtk.Box+BoxChild
-		this.cbSearchFieldType = global::Gtk.ComboBox.NewText ();
-		this.cbSearchFieldType.Name = "cbSearchFieldType";
-		this.hbox1.Add (this.cbSearchFieldType);
-		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.cbSearchFieldType]));
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.searchEntry]));
 		w5.Position = 1;
-		w5.Expand = false;
-		w5.Fill = false;
-		// Container child hbox1.Gtk.Box+BoxChild
-		this.searchBtn = new global::Gtk.Button ();
-		this.searchBtn.CanFocus = true;
-		this.searchBtn.Name = "searchBtn";
-		this.searchBtn.UseUnderline = true;
-		this.searchBtn.BorderWidth = ((uint)(6));
-		this.searchBtn.Label = global::Mono.Unix.Catalog.GetString ("SØG");
-		this.hbox1.Add (this.searchBtn);
-		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.searchBtn]));
-		w6.Position = 2;
+		this.vbox2.Add (this.hbox1);
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
+		w6.Position = 1;
 		w6.Expand = false;
 		w6.Fill = false;
-		this.vbox2.Add (this.hbox1);
-		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
-		w7.Position = 1;
-		w7.Expand = false;
-		w7.Fill = false;
 		this.GtkAlignment.Add (this.vbox2);
 		this.frame1.Add (this.GtkAlignment);
 		this.GtkLabel2 = new global::Gtk.Label ();
@@ -146,20 +132,18 @@ public partial class MainWindow
 		this.GtkLabel2.Justify = ((global::Gtk.Justification)(2));
 		this.frame1.LabelWidget = this.GtkLabel2;
 		this.vbox1.Add (this.frame1);
-		global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.frame1]));
-		w10.Position = 1;
+		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.frame1]));
+		w9.Position = 1;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
-		this.DefaultWidth = 276;
+		this.DefaultWidth = 266;
 		this.DefaultHeight = 380;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.pasteAction1.Activated += new global::System.EventHandler (this.onAddLinkClicked);
 		this.closeAction.Activated += new global::System.EventHandler (this.onRemoveLinkClicked);
-		this.searchEntry.Activated += new global::System.EventHandler (this.onSearchBtnClicked);
-		this.searchEntry.Changed += new global::System.EventHandler (this.onSearchBtnClicked);
-		this.searchBtn.Clicked += new global::System.EventHandler (this.onSearchBtnClicked);
+		this.searchEntry.Changed += new global::System.EventHandler (this.runLinkTreeSearch);
 	}
 }

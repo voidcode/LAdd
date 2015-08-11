@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.IO;
+using System.Net;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading;
 #if __MonoCS__
 	using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
 	using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
@@ -25,6 +29,65 @@ namespace LAdd
 			approot = AppDomain.CurrentDomain.BaseDirectory;
 			dbConn = new SQLiteConnection ("Data Source="+approot+"LAdd.db, Version=3");
 			fillCbFlagWithAllFlagTypes ();
+			fillInputsFromClipboard ();
+			/* retry getting title if value change in entryLink widget*/
+			entryLink.Changed += entryLink_changed;
+		}
+		void entryLink_changed (object sender, EventArgs e)
+		{
+			fillInputsFromClipboard ();
+		}
+		private void fillInputsFromClipboard(){
+			String urlFromClipboard = Gtk.Clipboard.Get (Gdk.Selection.Clipboard).WaitForText ();
+			entryLink.Text = urlFromClipboard;
+			if (urlFromClipboard.StartsWith ("http")) {
+				/*try get retrive the <Title> base on url*/
+
+				Thread th = new Thread (() => _getWebPageTitle (urlFromClipboard));
+				th.Start ();
+			}
+		}
+		/* this method is from this blog.
+		 * http://blogs.msdn.com/b/noahc/archive/2007/02/19/get-a-web-page-s-title-from-a-url-c.aspx */
+		public void _getWebPageTitle(string url)
+		{
+			entryTitle.IsEditable = false;
+			entryTitle.Text = "Loading title ...";
+			// Create a request to the url
+			HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
+
+			// If the request wasn't an HTTP request (like a file), ignore it
+			//if (request == null) return null;
+
+			// Use the user's credentials
+			request.UseDefaultCredentials = true;
+
+			// Obtain a response from the server, if there was an error, return nothing
+			HttpWebResponse response = null;
+			try { 
+				response = request.GetResponse() as HttpWebResponse; 
+				// Regular expression for an HTML title
+				string regex = @"(?<=<title.*>)([\s\S]*)(?=</title>)";
+				// If the correct HTML header exists for HTML text, continue
+				if (new List<string> (response.Headers.AllKeys).Contains ("Content-Type"))
+				if (response.Headers ["Content-Type"].StartsWith ("text/html")) {
+					// Download the page
+					WebClient web = new WebClient ();
+					web.UseDefaultCredentials = true;
+					string page = web.DownloadString (url);
+
+					// Extract the title
+					Regex ex = new Regex (regex, RegexOptions.IgnoreCase);
+					entryTitle.Text = "";
+					entryTitle.Text = ex.Match (page).Value.Trim ();
+					entryTitle.IsEditable = true;
+				} else {
+					entryLink.Text = "";
+					entryTitle.IsEditable = true;
+				}
+			} catch (WebException) { 
+				//return null; 
+			}
 		}
 		protected void fillCbFlagWithAllFlagTypes(){
 			dbConn.Open ();
@@ -67,10 +130,17 @@ namespace LAdd
 				labelStatus.Text = "Need add title and link";
 			}
 		}
-
+		protected void onBtnPasteClipboardTextIntoEntryLinkClicked (object sender, EventArgs e)
+		{
+			fillInputsFromClipboard ();
+		}
 		protected void newLinkDialog_btnClose (object sender, EventArgs e)
 		{
 			this.Destroy ();
+		}
+		protected void dialog1 (object sender, EventArgs e)
+		{
+			throw new NotImplementedException ();
 		}
 	}
 }
