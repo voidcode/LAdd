@@ -28,23 +28,35 @@ namespace LAdd
 			this.SetPosition (Gtk.WindowPosition.Center);
 			approot = AppDomain.CurrentDomain.BaseDirectory;
 			dbConn = new SQLiteConnection ("Data Source="+approot+"LAdd.db, Version=3");
+			//TODO make set password / change password dialog / window ... dbConn
 			fillCbFlagWithAllFlagTypes ();
 			fillInputsFromClipboard ();
-			/* retry getting title if value change in entryLink widget*/
-			entryLink.Changed += entryLink_changed;
+			/* retry getting title if value enter in entryLink widget*/
+			entryLink.Activated += entryLink_activated;
+			entryLink.GrabFocus ();
+			Gtk.Clipboard.Get (Gdk.Selection.Clipboard).OwnerChange += onClipboardOwnerChange;
 		}
-		void entryLink_changed (object sender, EventArgs e)
+		protected void entryLink_activated (object sender, EventArgs e)
 		{
+			string link = entryLink.Text.Trim ();
+			if (link.StartsWith ("http")) {
+				/*try get retrive the <Title> base on url*/
+				Thread th = new Thread (() => _getWebPageTitle (link));
+				th.Start ();
+			}
+		}
+		protected void onClipboardOwnerChange(object sender, EventArgs e){
 			fillInputsFromClipboard ();
 		}
 		private void fillInputsFromClipboard(){
 			String urlFromClipboard = Gtk.Clipboard.Get (Gdk.Selection.Clipboard).WaitForText ();
-			entryLink.Text = urlFromClipboard;
-			if (urlFromClipboard.StartsWith ("http")) {
-				/*try get retrive the <Title> base on url*/
-
-				Thread th = new Thread (() => _getWebPageTitle (urlFromClipboard));
-				th.Start ();
+			if (urlFromClipboard != null) {
+				entryLink.Text = urlFromClipboard;
+				if (urlFromClipboard.StartsWith ("http")) {
+					/*try get retrive the <Title> base on url*/
+					Thread th = new Thread (() => _getWebPageTitle (urlFromClipboard));
+					th.Start ();
+				}
 			}
 		}
 		/* this method is from this blog.
@@ -103,45 +115,81 @@ namespace LAdd
 			}
 			dbConn.Close ();
 		}
+		private bool _checkIfInputDataIsInDb(){
+			string link = entryLink.Text.Trim();
+			if (link.Length > 0) {
+				string lookupCheckQ = "select count(*) as numberOfRows from Links where link='" + link + "';";
+				try {
+					SQLiteCommand cmd = new SQLiteCommand (lookupCheckQ, dbConn);
+					dbConn.Open ();
+					SQLiteDataReader reader = cmd.ExecuteReader ();
+					if (reader.Read ()) {
+						Console.WriteLine (reader ["numberOfRows"]);
+						if(Convert.ToInt32( reader["numberOfRows"]) >0){ 
+							dbConn.Close ();
+							return true;
+						} else {
+							dbConn.Close ();
+							return false;
+						}
+					} else {
+						dbConn.Close ();
+						return false;
+					}
+				} catch (Exception e) {
+					dbConn.Close ();
+					Console.WriteLine (e.ToString ());
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
 		protected void newLinkDialog_btnOk (object sender, EventArgs e)
 		{
-			//TODO check if Link exists in db before addning it to Links-table
-			String title = entryTitle.Text;
-			String link = entryLink.Text;
-
-			String flag = "1";
-			if (title.Length > 0 && link.Length > 0) {
-				String insertLinkQ = "insert into Links (title, link, flag) values ('"+title+"', '"+link+"', '"+flag+"');";			
-				try {
-					SQLiteCommand cmd = new SQLiteCommand (insertLinkQ, dbConn);
-					dbConn.Open ();
-					//try to insert a userdefine link.
-					if(cmd.ExecuteNonQuery() > 0){
-						this.Destroy(); //kill newLinkDialog
+			if (!_checkIfInputDataIsInDb ()) {
+				//TODO check if Link exists in db before addning it to Links-table
+				string title = entryTitle.Text.Trim();
+				string link = entryLink.Text;
+				if (title.Length > 0 && link.Length > 0) {
+					if (cbFlag.ActiveText != null) {
+						string insertLinkQ = "insert into Links (title, link, flag) " +
+						                     "values ('" + title + "', '" + link + "', " +
+						                     "(select flagid from FlagTypes where title='" + cbFlag.ActiveText + "'));";		
+						try {
+							SQLiteCommand cmd = new SQLiteCommand (insertLinkQ, dbConn);
+							dbConn.Open ();
+							//try to insert a userdefine link.
+							if (cmd.ExecuteNonQuery () > 0) {
+								this.Destroy (); //kill newLinkDialog
+							} else {
+								labelStatus.Text = "Error: Link is NOT saved!";
+							}
+							dbConn.Close ();
+						} catch (SQLiteException e2) {
+							Console.Write (e2.ToString ());
+						}
 					} else {
-						labelStatus.Text = "Error: Link is NOT saved!";
+						cbFlag.GrabFocus ();
+						cbFlag.ShowNow ();
+						labelStatus.Text = "You need to choose a flag!";
 					}
-					dbConn.Close();
-				} catch (SQLiteException e2){
-					Console.Write (e2.ToString ());
+				} else {
+					labelStatus.Text = "Need add title and link";
 				}
-
 			} else {
-				labelStatus.Text = "Need add title and link";
+				entryLink.GrabFocus ();
+				labelStatus.Text = "This link is in your DB!";
 			}
 		}
 		protected void onBtnPasteClipboardTextIntoEntryLinkClicked (object sender, EventArgs e)
 		{
+			labelStatus.Text = "";
 			fillInputsFromClipboard ();
 		}
 		protected void newLinkDialog_btnClose (object sender, EventArgs e)
 		{
 			this.Destroy ();
 		}
-		protected void dialog1 (object sender, EventArgs e)
-		{
-			throw new NotImplementedException ();
-		}
 	}
 }
-

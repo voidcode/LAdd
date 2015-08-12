@@ -119,6 +119,7 @@
                             <property name="MemberName" />
                             <property name="IsTextCombo">True</property>
                             <property name="Items" translatable="yes" />
+                            <signal name="Changed" handler="onCbSearchFieldType" />
                           </widget>
                           <packing>
                             <property name="Position">0</property>
@@ -133,7 +134,8 @@
                             <property name="CanFocus">True</property>
                             <property name="IsEditable">True</property>
                             <property name="InvisibleChar">•</property>
-                            <signal name="Changed" handler="runLinkTreeSearch" />
+                            <signal name="Changed" handler="onCbSearchFieldType" />
+                            <signal name="Activated" handler="onCbSearchFieldType" />
                           </widget>
                           <packing>
                             <property name="Position">1</property>

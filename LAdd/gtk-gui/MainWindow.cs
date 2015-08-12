@@ -144,6 +144,8 @@ public partial class MainWindow
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.pasteAction1.Activated += new global::System.EventHandler (this.onAddLinkClicked);
 		this.closeAction.Activated += new global::System.EventHandler (this.onRemoveLinkClicked);
-		this.searchEntry.Changed += new global::System.EventHandler (this.runLinkTreeSearch);
+		this.cbSearchFieldType.Changed += new global::System.EventHandler (this.onCbSearchFieldType);
+		this.searchEntry.Changed += new global::System.EventHandler (this.onCbSearchFieldType);
+		this.searchEntry.Activated += new global::System.EventHandler (this.onCbSearchFieldType);
 	}
 }

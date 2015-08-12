@@ -110,18 +110,25 @@ public partial class MainWindow: Gtk.Window
 				dbConn.Close();
 				fillLinksTreeFromDB();
 			} else {
-				Console.WriteLine("DE.LETE: links with linkid=1 is delete from DB.");
+				Console.WriteLine("DELETE: links with linkid=1 is delete from DB.");
 			}
 			dbConn.Close();
 		} catch (SQLiteException error){
 			Console.Write (error.ToString());
 		}
 	}
-	protected void runLinkTreeSearch (object sender, EventArgs e)
-	{
-		Console.WriteLine("runLinkTreeSearch");
+	private void _runLinkTreeSearch(){
 		//run a db-search base on entry-text lookup link where title like input
-		String searchQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle from Links join FlagTypes on Links.flag = FlagTypes.flagid where Links.title like '%"+searchEntry.Text.ToString()+"%';";
+		string searchQ; 
+		if (cbSearchFieldType.ActiveText != null) {
+			searchQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle " +
+				"from Links " +
+				"join FlagTypes on Links.flag = FlagTypes.flagid " +
+				"where FlagTypes.title ='" + cbSearchFieldType.ActiveText + "' " +
+				"and Links.title like '%" + searchEntry.Text.ToString () + "%';";
+		} else {
+			searchQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle from Links join FlagTypes on Links.flag = FlagTypes.flagid where Links.title like '%" + searchEntry.Text.ToString () + "%';";
+		}
 		SQLiteCommand cmd = new SQLiteCommand (searchQ, dbConn);
 		try {
 			dbConn.Open();
@@ -134,6 +141,10 @@ public partial class MainWindow: Gtk.Window
 		} catch (SQLiteException err){
 			Console.Write(err.ToString());
 		}
+	}
+	protected void onCbSearchFieldType (object sender, EventArgs e)
+	{
+		_runLinkTreeSearch ();
 	}
 	//TODO 3
 	/*
