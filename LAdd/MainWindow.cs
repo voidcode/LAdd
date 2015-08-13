@@ -1,6 +1,7 @@
 ﻿using System;
 using Gtk;
 using System.Data;
+using System.Collections.Generic;
 #if __MonoCS__
 	using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
 	using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
@@ -14,10 +15,10 @@ using System.Data;
 #endif
 public partial class MainWindow: Gtk.Window
 {
-	String approot;
-	public TreeStore ts;
-	TreeView tv;
-	SQLiteConnection dbConn;
+	private String approot;
+	private TreeStore ts;
+	private TreeView tv;
+	private SQLiteConnection dbConn;
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		this.SetPosition(Gtk.WindowPosition.Center);
@@ -55,7 +56,7 @@ public partial class MainWindow: Gtk.Window
 		swLinks.Add (tv);
 		swLinks.ShowAll ();
 	}
-	public void fillLinksTreeFromDB(){
+	private void fillLinksTreeFromDB(){
 		dbConn.Open ();
 		//gets all links from table Links
 		//there is with join on FlagTypes Table
@@ -66,7 +67,7 @@ public partial class MainWindow: Gtk.Window
 			ts.Clear ();
 			//append all links to TreeStore
 			while(reader.Read()){
-				ts.AppendValues(reader["title"], reader["flagTitle"], reader["Link"]);
+				ts.AppendValues(rmColmentEnding(reader["title"].ToString()), reader["flagTitle"], reader["Link"]);
 			}
 		} catch (SQLiteException e){
 			Console.Write (e.ToString());
@@ -117,6 +118,12 @@ public partial class MainWindow: Gtk.Window
 			Console.Write (error.ToString());
 		}
 	}
+	private string rmColmentEnding(string t){
+		if(t.Length > 50)
+			return t.Substring(0, t.Length - (t.Length - 50)) + " ...";
+		else
+			return t;
+	}
 	private void _runLinkTreeSearch(){
 		//run a db-search base on entry-text lookup link where title like input
 		string searchQ; 
@@ -135,7 +142,7 @@ public partial class MainWindow: Gtk.Window
 			SQLiteDataReader reader = cmd.ExecuteReader();
 			ts.Clear (); //remove all links in links-tree
 			while(reader.Read()){
-				ts.AppendValues(reader["title"], reader["flagTitle"], reader["Link"]);
+				ts.AppendValues(rmColmentEnding(reader["title"].ToString()), reader["flagTitle"], reader["Link"]);
 			}
 			dbConn.Close();
 		} catch (SQLiteException err){

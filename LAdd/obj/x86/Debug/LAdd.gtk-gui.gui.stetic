@@ -15,7 +15,7 @@
       </source>
     </icon-set>
   </icon-factory>
-  <widget class="Gtk.Window" id="MainWindow" design-size="266 380">
+  <widget class="Gtk.Window" id="MainWindow" design-size="364 380">
     <action-group name="Default">
       <action id="pasteAction1">
         <property name="Type">Action</property>
@@ -94,7 +94,6 @@
                       <widget class="Gtk.ScrolledWindow" id="swLinks">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
-                        <property name="HscrollbarPolicy">Never</property>
                         <child>
                           <widget class="Gtk.Viewport" id="GtkViewport">
                             <property name="MemberName" />

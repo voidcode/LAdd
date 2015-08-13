@@ -20,13 +20,12 @@ namespace LAdd
 {
 	public partial class newLinkDialog : Gtk.Dialog
 	{
-		String approot;
-		SQLiteConnection dbConn;
+		private string approot = AppDomain.CurrentDomain.BaseDirectory;
+		private SQLiteConnection dbConn;
 		public newLinkDialog ()
 		{
 			this.Build ();
 			this.SetPosition (Gtk.WindowPosition.Center);
-			approot = AppDomain.CurrentDomain.BaseDirectory;
 			dbConn = new SQLiteConnection ("Data Source="+approot+"LAdd.db, Version=3");
 			//TODO make set password / change password dialog / window ... dbConn
 			fillCbFlagWithAllFlagTypes ();
@@ -61,7 +60,7 @@ namespace LAdd
 		}
 		/* this method is from this blog.
 		 * http://blogs.msdn.com/b/noahc/archive/2007/02/19/get-a-web-page-s-title-from-a-url-c.aspx */
-		public void _getWebPageTitle(string url)
+		private void _getWebPageTitle(string url)
 		{
 			entryTitle.IsEditable = false;
 			entryTitle.Text = "Loading title ...";

@@ -92,7 +92,6 @@ public partial class MainWindow
 		this.swLinks = new global::Gtk.ScrolledWindow ();
 		this.swLinks.CanFocus = true;
 		this.swLinks.Name = "swLinks";
-		this.swLinks.HscrollbarPolicy = ((global::Gtk.PolicyType)(2));
 		this.vbox2.Add (this.swLinks);
 		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.swLinks]));
 		w3.Position = 0;
@@ -138,7 +137,7 @@ public partial class MainWindow
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
-		this.DefaultWidth = 266;
+		this.DefaultWidth = 364;
 		this.DefaultHeight = 380;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
