@@ -13,3 +13,4 @@
 /home/work/workspace/LAdd/LAdd/bin/Debug/System.Data.SQLite.EF6.dll
 /home/work/workspace/LAdd/LAdd/bin/Debug/System.Data.SQLite.Linq.dll
 /home/work/workspace/LAdd/LAdd/bin/Debug/System.Transactions.Portable.dll
+/home/work/workspace/LAdd/LAdd/obj/x86/Debug/LAdd.users26.png

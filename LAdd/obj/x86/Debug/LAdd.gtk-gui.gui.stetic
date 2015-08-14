@@ -15,7 +15,7 @@
       </source>
     </icon-set>
   </icon-factory>
-  <widget class="Gtk.Window" id="MainWindow" design-size="364 380">
+  <widget class="Gtk.Window" id="MainWindow" design-size="1156 380">
     <action-group name="Default">
       <action id="pasteAction1">
         <property name="Type">Action</property>
@@ -60,13 +60,33 @@
         <property name="MemberName" />
         <property name="Spacing">6</property>
         <child>
-          <widget class="Gtk.Toolbar" id="toolbar1">
+          <widget class="Gtk.HBox" id="hbox2">
             <property name="MemberName" />
-            <property name="ShowArrow">False</property>
-            <node name="toolbar1" type="Toolbar">
-              <node type="Toolitem" action="pasteAction1" />
-              <node type="Toolitem" action="closeAction" />
-            </node>
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.Toolbar" id="toolbar1">
+                <property name="MemberName" />
+                <property name="ShowArrow">False</property>
+                <node name="toolbar1" type="Toolbar">
+                  <node type="Toolitem" action="pasteAction1" />
+                  <node type="Toolitem" action="closeAction" />
+                </node>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="labelTopStatus">
+                <property name="MemberName" />
+                <property name="Xalign">0</property>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">False</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">0</property>

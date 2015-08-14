@@ -19,7 +19,11 @@ public partial class MainWindow
 	
 	private global::Gtk.VBox vbox1;
 	
+	private global::Gtk.HBox hbox2;
+	
 	private global::Gtk.Toolbar toolbar1;
+	
+	private global::Gtk.Label labelTopStatus;
 	
 	private global::Gtk.Frame frame1;
 	
@@ -66,15 +70,29 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
+		this.hbox2 = new global::Gtk.HBox ();
+		this.hbox2.Name = "hbox2";
+		this.hbox2.Spacing = 6;
+		// Container child hbox2.Gtk.Box+BoxChild
 		this.UIManager.AddUiFromString ("<ui><toolbar name='toolbar1'><toolitem name='pasteAction1' action='pasteAction1'/><toolitem name='closeAction' action='closeAction'/></toolbar></ui>");
 		this.toolbar1 = ((global::Gtk.Toolbar)(this.UIManager.GetWidget ("/toolbar1")));
 		this.toolbar1.Name = "toolbar1";
 		this.toolbar1.ShowArrow = false;
-		this.vbox1.Add (this.toolbar1);
-		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.toolbar1]));
+		this.hbox2.Add (this.toolbar1);
+		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.toolbar1]));
 		w2.Position = 0;
-		w2.Expand = false;
-		w2.Fill = false;
+		// Container child hbox2.Gtk.Box+BoxChild
+		this.labelTopStatus = new global::Gtk.Label ();
+		this.labelTopStatus.Name = "labelTopStatus";
+		this.labelTopStatus.Xalign = 0F;
+		this.hbox2.Add (this.labelTopStatus);
+		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.labelTopStatus]));
+		w3.Position = 1;
+		this.vbox1.Add (this.hbox2);
+		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox2]));
+		w4.Position = 0;
+		w4.Expand = false;
+		w4.Fill = false;
 		// Container child vbox1.Gtk.Box+BoxChild
 		this.frame1 = new global::Gtk.Frame ();
 		this.frame1.Name = "frame1";
@@ -93,8 +111,8 @@ public partial class MainWindow
 		this.swLinks.CanFocus = true;
 		this.swLinks.Name = "swLinks";
 		this.vbox2.Add (this.swLinks);
-		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.swLinks]));
-		w3.Position = 0;
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.swLinks]));
+		w5.Position = 0;
 		// Container child vbox2.Gtk.Box+BoxChild
 		this.hbox1 = new global::Gtk.HBox ();
 		this.hbox1.Name = "hbox1";
@@ -103,10 +121,10 @@ public partial class MainWindow
 		this.cbSearchFieldType = global::Gtk.ComboBox.NewText ();
 		this.cbSearchFieldType.Name = "cbSearchFieldType";
 		this.hbox1.Add (this.cbSearchFieldType);
-		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.cbSearchFieldType]));
-		w4.Position = 0;
-		w4.Expand = false;
-		w4.Fill = false;
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.cbSearchFieldType]));
+		w6.Position = 0;
+		w6.Expand = false;
+		w6.Fill = false;
 		// Container child hbox1.Gtk.Box+BoxChild
 		this.searchEntry = new global::Gtk.Entry ();
 		this.searchEntry.CanFocus = true;
@@ -114,13 +132,13 @@ public partial class MainWindow
 		this.searchEntry.IsEditable = true;
 		this.searchEntry.InvisibleChar = '•';
 		this.hbox1.Add (this.searchEntry);
-		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.searchEntry]));
-		w5.Position = 1;
+		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.searchEntry]));
+		w7.Position = 1;
 		this.vbox2.Add (this.hbox1);
-		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
-		w6.Position = 1;
-		w6.Expand = false;
-		w6.Fill = false;
+		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
+		w8.Position = 1;
+		w8.Expand = false;
+		w8.Fill = false;
 		this.GtkAlignment.Add (this.vbox2);
 		this.frame1.Add (this.GtkAlignment);
 		this.GtkLabel2 = new global::Gtk.Label ();
@@ -131,13 +149,13 @@ public partial class MainWindow
 		this.GtkLabel2.Justify = ((global::Gtk.Justification)(2));
 		this.frame1.LabelWidget = this.GtkLabel2;
 		this.vbox1.Add (this.frame1);
-		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.frame1]));
-		w9.Position = 1;
+		global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.frame1]));
+		w11.Position = 1;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
-		this.DefaultWidth = 364;
+		this.DefaultWidth = 1156;
 		this.DefaultHeight = 380;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);

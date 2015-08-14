@@ -19,6 +19,9 @@ public partial class MainWindow: Gtk.Window
 	private TreeStore ts;
 	private TreeView tv;
 	private SQLiteConnection dbConn;
+	private List<int> tsIdList = new List<int>();
+	private List<string> tsLinkList = new List<string>();
+	private bool deleteMode = false;
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		this.SetPosition(Gtk.WindowPosition.Center);
@@ -55,19 +58,43 @@ public partial class MainWindow: Gtk.Window
 		tv.AppendColumn ("Link", new CellRendererText (), "text", 2);
 		swLinks.Add (tv);
 		swLinks.ShowAll ();
+		tv.RowActivated += tvRowActivated;
+	}
+	/*on treeview tv on row-clciked*/
+	void tvRowActivated (object o, RowActivatedArgs args)
+	{
+		int selectedRowNum = Convert.ToInt32(args.Path.ToString());
+		if (deleteMode)
+			_dbDeleteLinkById (tsIdList[selectedRowNum]);
+		else
+			_openLinkByUrl (tsLinkList[selectedRowNum]);
 	}
 	private void fillLinksTreeFromDB(){
-		dbConn.Open ();
+
 		//gets all links from table Links
 		//there is with join on FlagTypes Table
-		String selectAllLinksQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle from Links join FlagTypes on Links.flag = FlagTypes.flagid;";
+		string selectAllLinksQ; 
+		if (cbSearchFieldType.ActiveText != null) {
+			selectAllLinksQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle " +
+				"from Links " +
+				"join FlagTypes on Links.flag = FlagTypes.flagid " +
+				"where FlagTypes.title ='" + cbSearchFieldType.ActiveText + "';";
+		} else {
+			selectAllLinksQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle from Links join FlagTypes on Links.flag = FlagTypes.flagid where Links.title like '%" + searchEntry.Text.ToString () + "%';";
+		}
+		//String selectAllLinksQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle from Links join FlagTypes on Links.flag = FlagTypes.flagid;";
 		try {
+			dbConn.Open ();
 			SQLiteCommand cmd = new SQLiteCommand(selectAllLinksQ, dbConn);
 			SQLiteDataReader reader = cmd.ExecuteReader();
 			ts.Clear ();
 			//append all links to TreeStore
+			tsIdList.Clear();
+			tsLinkList.Clear();
 			while(reader.Read()){
 				ts.AppendValues(rmColmentEnding(reader["title"].ToString()), reader["flagTitle"], reader["Link"]);
+				tsIdList.Add(Convert.ToInt32(reader["linkid"]));
+				tsLinkList.Add(reader["Link"].ToString());
 			}
 		} catch (SQLiteException e){
 			Console.Write (e.ToString());
@@ -96,13 +123,21 @@ public partial class MainWindow: Gtk.Window
 	 * Or error msg... text: You need to select a link before you can delete it ***/
 	protected void onRemoveLinkClicked (object sender, EventArgs e)
 	{
-		//Console.WriteLine(tp[0]);
+		if (deleteMode) {
+			deleteMode = false;
+			labelTopStatus.Text = "";
+		} else {
+			labelTopStatus.Text = "Click on a link to delete it!";
+			deleteMode = true;
+		}
+	}
+	private void _openLinkByUrl (string url){
+		System.Diagnostics.Process.Start (url);
+	}
+	private void _dbDeleteLinkById(int linkid){
 		try {
-			//TODO 2 get seleted linkid from TreeStore
-
 			//delete seleted link base on linkid
-			String deleteLinkQ = "delete from Links where linkid=2";
-	
+			String deleteLinkQ = "delete from Links where linkid="+linkid.ToString()+";";
 			dbConn.Open();
 			SQLiteCommand cmd = new SQLiteCommand(deleteLinkQ, dbConn);
 			if(cmd.ExecuteNonQuery() > 0){
@@ -141,8 +176,12 @@ public partial class MainWindow: Gtk.Window
 			dbConn.Open();
 			SQLiteDataReader reader = cmd.ExecuteReader();
 			ts.Clear (); //remove all links in links-tree
+			tsIdList.Clear();
+			tsLinkList.Clear();
 			while(reader.Read()){
 				ts.AppendValues(rmColmentEnding(reader["title"].ToString()), reader["flagTitle"], reader["Link"]);
+				tsIdList.Add(Convert.ToInt32(reader["linkid"]));
+				tsLinkList.Add(reader["Link"].ToString());
 			}
 			dbConn.Close();
 		} catch (SQLiteException err){

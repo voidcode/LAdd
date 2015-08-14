@@ -178,7 +178,7 @@ namespace LAdd
 				}
 			} else {
 				entryLink.GrabFocus ();
-				labelStatus.Text = "This link is in your DB!";
+				labelStatus.Text = "This link exists!";
 			}
 		}
 		protected void onBtnPasteClipboardTextIntoEntryLinkClicked (object sender, EventArgs e)
