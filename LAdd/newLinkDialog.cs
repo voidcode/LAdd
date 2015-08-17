@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Collections.Generic;
@@ -60,46 +61,6 @@ namespace LAdd
 		}
 		/* this method is from this blog.
 		 * http://blogs.msdn.com/b/noahc/archive/2007/02/19/get-a-web-page-s-title-from-a-url-c.aspx */
-		private void _getWebPageTitle(string url)
-		{
-			entryTitle.IsEditable = false;
-			entryTitle.Text = "Loading title ...";
-			// Create a request to the url
-			HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
-
-			// If the request wasn't an HTTP request (like a file), ignore it
-			//if (request == null) return null;
-
-			// Use the user's credentials
-			request.UseDefaultCredentials = true;
-
-			// Obtain a response from the server, if there was an error, return nothing
-			HttpWebResponse response = null;
-			try { 
-				response = request.GetResponse() as HttpWebResponse; 
-				// Regular expression for an HTML title
-				string regex = @"(?<=<title.*>)([\s\S]*)(?=</title>)";
-				// If the correct HTML header exists for HTML text, continue
-				if (new List<string> (response.Headers.AllKeys).Contains ("Content-Type"))
-				if (response.Headers ["Content-Type"].StartsWith ("text/html")) {
-					// Download the page
-					WebClient web = new WebClient ();
-					web.UseDefaultCredentials = true;
-					string page = web.DownloadString (url);
-
-					// Extract the title
-					Regex ex = new Regex (regex, RegexOptions.IgnoreCase);
-					entryTitle.Text = "";
-					entryTitle.Text = ex.Match (page).Value.Trim ();
-					entryTitle.IsEditable = true;
-				} else {
-					entryLink.Text = "";
-					entryTitle.IsEditable = true;
-				}
-			} catch (WebException) { 
-				//return null; 
-			}
-		}
 		protected void fillCbFlagWithAllFlagTypes(){
 			dbConn.Open ();
 			String getAllFlagTypesQ = "select * from FlagTypes;";
@@ -116,8 +77,10 @@ namespace LAdd
 		}
 		private bool _checkIfInputDataIsInDb(){
 			string link = entryLink.Text.Trim();
-			if (link.Length > 0) {
-				string lookupCheckQ = "select count(*) as numberOfRows from Links where link='" + link + "';";
+			if (link.Length > 0 && cbFlag.ActiveText != null) {
+				string lookupCheckQ = "select count(*) as numberOfRows from Links "+
+						"where link='"+link+"' "+ 
+						"and flag=(select flagid from FlagTypes where title='"+cbFlag.ActiveText+"');";
 				try {
 					SQLiteCommand cmd = new SQLiteCommand (lookupCheckQ, dbConn);
 					dbConn.Open ();
@@ -147,7 +110,6 @@ namespace LAdd
 		protected void newLinkDialog_btnOk (object sender, EventArgs e)
 		{
 			if (!_checkIfInputDataIsInDb ()) {
-				//TODO check if Link exists in db before addning it to Links-table
 				string title = entryTitle.Text.Trim();
 				string link = entryLink.Text;
 				if (title.Length > 0 && link.Length > 0) {
@@ -189,6 +151,48 @@ namespace LAdd
 		protected void newLinkDialog_btnClose (object sender, EventArgs e)
 		{
 			this.Destroy ();
+		}
+		/* this method is from this blog.
+		 * http://blogs.msdn.com/b/noahc/archive/2007/02/19/get-a-web-page-s-title-from-a-url-c.aspx */
+		private void _getWebPageTitle(string url)
+		{
+			entryTitle.IsEditable = false;
+			entryTitle.Text = "Loading title ...";
+			// Create a request to the url
+			HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
+
+			// If the request wasn't an HTTP request (like a file), ignore it
+			//if (request == null) return null;
+
+			// Use the user's credentials
+			request.UseDefaultCredentials = true;
+
+			// Obtain a response from the server, if there was an error, return nothing
+			HttpWebResponse response = null;
+			try { 
+				response = request.GetResponse() as HttpWebResponse; 
+				// Regular expression for an HTML title
+				string regex = @"(?<=<title.*>)([\s\S]*)(?=</title>)";
+				// If the correct HTML header exists for HTML text, continue
+				if (new List<string> (response.Headers.AllKeys).Contains ("Content-Type"))
+				if (response.Headers ["Content-Type"].StartsWith ("text/html")) {
+					// Download the page
+					WebClient web = new WebClient ();
+					web.UseDefaultCredentials = true;
+					string page = web.DownloadString (url);
+
+					// Extract the title
+					Regex ex = new Regex (regex, RegexOptions.IgnoreCase);
+					entryTitle.Text = "";
+					entryTitle.Text = ex.Match (page).Value.Trim ();
+					entryTitle.IsEditable = true;
+				} else {
+					entryLink.Text = "";
+					entryTitle.IsEditable = true;
+				}
+			} catch (WebException) { 
+				//return null; 
+			}
 		}
 	}
 }

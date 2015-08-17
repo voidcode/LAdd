@@ -2,6 +2,14 @@
 using Gtk;
 using System.Data;
 using System.Collections.Generic;
+using System.Diagnostics;
+
+using System.IO;
+using System.Net;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading;
+using LAdd;
 #if __MonoCS__
 	using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
 	using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
@@ -18,7 +26,7 @@ public partial class MainWindow: Gtk.Window
 	private String approot;
 	private TreeStore ts;
 	private TreeView tv;
-	private SQLiteConnection dbConn;
+	private SQLiteConnection dbConn = null;
 	private List<int> tsIdList = new List<int>();
 	private List<string> tsLinkList = new List<string>();
 	private bool deleteMode = false;
@@ -28,10 +36,13 @@ public partial class MainWindow: Gtk.Window
 		Build ();
 		buildLinksTree ();
 		approot = AppDomain.CurrentDomain.BaseDirectory;
-		dbConn = new SQLiteConnection ("Data Source="+approot+"LAdd.db");
+		setDbDataSource (approot+"LAdd.db");
 		fillCbSearchFieldType ();
 		fillLinksTreeFromDB ();
 		searchEntry.GrabFocus ();
+	}
+	private void setDbDataSource(string dbPath){
+		dbConn = new SQLiteConnection ("Data Source="+dbPath);
 	}
 	protected void fillCbSearchFieldType(){
 		dbConn.Open ();
@@ -119,8 +130,7 @@ public partial class MainWindow: Gtk.Window
 		searchEntry.Text = "";
 		fillLinksTreeFromDB ();
 	}
-	/*** remove the seleted link in the TreeStore. 
-	 * Or error msg... text: You need to select a link before you can delete it ***/
+	/*** remove the seleted link in the TreeStore ***/
 	protected void onRemoveLinkClicked (object sender, EventArgs e)
 	{
 		if (deleteMode) {
@@ -132,7 +142,7 @@ public partial class MainWindow: Gtk.Window
 		}
 	}
 	private void _openLinkByUrl (string url){
-		System.Diagnostics.Process.Start (url);
+		Process.Start (url);
 	}
 	private void _dbDeleteLinkById(int linkid){
 		try {
@@ -192,12 +202,85 @@ public partial class MainWindow: Gtk.Window
 	{
 		_runLinkTreeSearch ();
 	}
-	//TODO 3
-	/*
-		add a http tcp server here os use just can write
-		http://localhost:1010/<LINK-URL>
-		this save the link to sqlite3 db.
-	*/
 	//TODO 6 add/make so enduser can create new FlagTypes.
 	//TODO 7 test this app in on windows 7, 8...
+	private bool _fetAllLoadingTitlesLinks(){
+		SQLiteCommand cmd;
+		string updateTitlesQ = "";
+		dbConn.Open ();
+		string selectLinksWithTitleLoading = "select linkid, link from Links where title='Loading title ...';";
+		cmd = new SQLiteCommand(selectLinksWithTitleLoading, dbConn);
+		SQLiteDataReader reader = cmd.ExecuteReader();
+		while(reader.Read()){
+			updateTitlesQ += "update Links set title='"+_getWebPageTitle(reader["link"].ToString())+"' where linkid="+reader["linkid"].ToString()+";";
+		}
+		Console.Write(updateTitlesQ);
+		cmd = new SQLiteCommand(updateTitlesQ, dbConn);
+		if(cmd.ExecuteNonQuery() > 0){
+			dbConn.Close ();
+			return true;	
+		} else {
+			dbConn.Close ();
+			return false;
+		}
+	}
+	protected void onFetchTitles (object sender, EventArgs e)
+	{
+		if (_fetAllLoadingTitlesLinks ()) 
+			fillLinksTreeFromDB ();
+	}
+	private string _getWebPageTitle(string url)
+	{
+		// Create a request to the url
+		HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
+
+		// If the request wasn't an HTTP request (like a file), ignore it
+		//if (request == null) return null;
+
+		// Use the user's credentials
+		request.UseDefaultCredentials = true;
+
+		// Obtain a response from the server, if there was an error, return nothing
+		HttpWebResponse response = null;
+		try { 
+			response = request.GetResponse() as HttpWebResponse; 
+			// Regular expression for an HTML title
+			string regex = @"(?<=<title.*>)([\s\S]*)(?=</title>)";
+			// If the correct HTML header exists for HTML text, continue
+			if (new List<string> (response.Headers.AllKeys).Contains ("Content-Type")){
+				if (response.Headers ["Content-Type"].StartsWith ("text/html")) {
+					// Download the page
+					WebClient web = new WebClient ();
+					web.UseDefaultCredentials = true;
+					string page = web.DownloadString (url);
+
+					// Extract the title
+					Regex ex = new Regex (regex, RegexOptions.IgnoreCase);
+
+					return ex.Match (page).Value.Trim ();
+				} else return "";
+			} else return "";
+		} catch (WebException) { 
+			return ""; 
+		}
+	}
+
+	protected void onBtnChooseDbClicked (object sender, EventArgs e)
+	{
+		Gtk.FileChooserDialog fcd = new Gtk.FileChooserDialog (
+			"Choose your links.db",
+			this,
+			FileChooserAction.Open,
+			"Cancal", ResponseType.Cancel,
+			"Choose", ResponseType.Accept
+		);
+		if (fcd.Run () == (int)ResponseType.Accept) {
+			if (System.IO.Path.GetExtension (fcd.Filename) == ".db") {
+				setDbDataSource (fcd.Filename);
+				fillLinksTreeFromDB ();
+				fcd.Destroy ();
+			}
+		} else
+			fcd.Destroy ();
+	}
 }

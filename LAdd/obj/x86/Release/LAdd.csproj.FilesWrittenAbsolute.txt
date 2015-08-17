@@ -1,0 +1,16 @@
+/home/work/workspace/LAdd/LAdd/obj/x86/Release/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/work/workspace/LAdd/LAdd/obj/x86/Release/LAdd.gtk-gui.gui.stetic
+/home/work/workspace/LAdd/LAdd/obj/x86/Release/LAdd.users26.png
+/home/work/workspace/LAdd/LAdd/bin/Release/LAdd.exe.config
+/home/work/workspace/LAdd/LAdd/bin/Release/LAdd.exe.mdb
+/home/work/workspace/LAdd/LAdd/bin/Release/LAdd.exe
+/home/work/workspace/LAdd/LAdd/obj/x86/Release/LAdd.exe
+/home/work/workspace/LAdd/LAdd/obj/x86/Release/LAdd.exe.mdb
+/home/work/workspace/LAdd/LAdd/bin/Release/EntityFramework.dll
+/home/work/workspace/LAdd/LAdd/bin/Release/EntityFramework.SqlServer.dll
+/home/work/workspace/LAdd/LAdd/bin/Release/Mono.Data.Sqlite.dll
+/home/work/workspace/LAdd/LAdd/bin/Release/System.Data.Portable.dll
+/home/work/workspace/LAdd/LAdd/bin/Release/System.Data.SQLite.dll
+/home/work/workspace/LAdd/LAdd/bin/Release/System.Data.SQLite.EF6.dll
+/home/work/workspace/LAdd/LAdd/bin/Release/System.Data.SQLite.Linq.dll
+/home/work/workspace/LAdd/LAdd/bin/Release/System.Transactions.Portable.dll

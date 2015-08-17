@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]
 [assembly: AssemblyProduct ("")]
-[assembly: AssemblyCopyright ("work")]
+[assembly: AssemblyCopyright ("Terkel Sorensen")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 

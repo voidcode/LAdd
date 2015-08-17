@@ -15,7 +15,7 @@
       </source>
     </icon-set>
   </icon-factory>
-  <widget class="Gtk.Window" id="MainWindow" design-size="1156 380">
+  <widget class="Gtk.Window" id="MainWindow" design-size="444 380">
     <action-group name="Default">
       <action id="pasteAction1">
         <property name="Type">Action</property>
@@ -49,6 +49,18 @@
         <property name="Label" translatable="yes" />
         <property name="StockId">gtk-paste</property>
       </action>
+      <action id="refreshFetchOfTitles">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-refresh</property>
+        <signal name="Activated" handler="onRefreshFetchOfTitles" />
+      </action>
+      <action id="refreshAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-refresh</property>
+        <signal name="Activated" handler="onFetchTitles" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
@@ -70,6 +82,7 @@
                 <node name="toolbar1" type="Toolbar">
                   <node type="Toolitem" action="pasteAction1" />
                   <node type="Toolitem" action="closeAction" />
+                  <node type="Toolitem" action="refreshAction" />
                 </node>
               </widget>
               <packing>
@@ -85,6 +98,22 @@
               <packing>
                 <property name="Position">1</property>
                 <property name="AutoSize">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Button" id="btnChooseDb">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Type">TextOnly</property>
+                <property name="Label" translatable="yes">Choose database</property>
+                <property name="UseUnderline">True</property>
+                <signal name="Clicked" handler="onBtnChooseDbClicked" />
+              </widget>
+              <packing>
+                <property name="Position">2</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
               </packing>
             </child>
           </widget>
