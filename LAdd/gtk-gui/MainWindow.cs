@@ -111,7 +111,7 @@ public partial class MainWindow
 		this.btnChooseDb.CanFocus = true;
 		this.btnChooseDb.Name = "btnChooseDb";
 		this.btnChooseDb.UseUnderline = true;
-		this.btnChooseDb.Label = global::Mono.Unix.Catalog.GetString ("Choose database");
+		this.btnChooseDb.Label = global::Mono.Unix.Catalog.GetString ("Database's");
 		this.hbox2.Add (this.btnChooseDb);
 		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.btnChooseDb]));
 		w4.Position = 2;

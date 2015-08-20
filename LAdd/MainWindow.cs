@@ -4,6 +4,7 @@ using System.Data;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Collections.Generic;
@@ -24,26 +25,32 @@ using LAdd;
 public partial class MainWindow: Gtk.Window
 {
 	private string titleLoadingText = "Loading ..."; 
-	private String approot;
 	private TreeStore ts;
 	private TreeView tv;
 	private SQLiteConnection dbConn = null;
 	private List<int> tsIdList = new List<int>();
 	private List<string> tsLinkList = new List<string>();
 	private string mode = "openlink";
+	private string dbPath = null;
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
-		this.SetPosition(Gtk.WindowPosition.Center);
 		Build ();
+		if (dbPath == null) {
+			DatabaseWindow db = new DatabaseWindow ();
+			db.ShowAll ();
+			buildWindow ();
+		} else buildWindow();
+	}
+	private void buildWindow(){
+		dbConn = new SQLiteConnection ("Data Source="+dbPath+".db");
+		this.SetPosition(Gtk.WindowPosition.Center);
 		buildLinksTree ();
-		approot = AppDomain.CurrentDomain.BaseDirectory;
-		setDbDataSource (approot+"LAdd.db");
 		fillCbSearchFieldType ();
 		fillLinksTreeFromDB ();
 		searchEntry.GrabFocus ();
 	}
-	private void setDbDataSource(string dbPath){
-		dbConn = new SQLiteConnection ("Data Source="+dbPath);
+	private void setDbDataSource(string dbFolderPath, string databaseName){
+		dbConn = new SQLiteConnection ("Data Source="+dbFolderPath+databaseName);
 	}
 	protected void fillCbSearchFieldType(){
 		dbConn.Open ();
@@ -259,21 +266,8 @@ public partial class MainWindow: Gtk.Window
 	}
 	protected void onBtnChooseDbClicked (object sender, EventArgs e)
 	{
-		Gtk.FileChooserDialog fcd = new Gtk.FileChooserDialog (
-			"Select links database file",
-			this,
-			FileChooserAction.Open,
-			"Cancal", ResponseType.Cancel,
-			"Use this database", ResponseType.Accept
-		);
-		if (fcd.Run () == (int)ResponseType.Accept) {
-			if (System.IO.Path.GetExtension (fcd.Filename) == ".db") {
-				setDbDataSource (fcd.Filename);
-				fillLinksTreeFromDB ();
-				fcd.Destroy ();
-			}
-		} else
-			fcd.Destroy ();
+		DatabaseWindow db = new DatabaseWindow ();
+		db.ShowAll ();
 	}
 	protected void onEditLinkAction (object sender, EventArgs e)
 	{

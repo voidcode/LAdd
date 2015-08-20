@@ -101,6 +101,8 @@
     <Compile Include="gtk-gui\MainWindow.cs" />
     <Compile Include="PasswordDialog.cs" />
     <Compile Include="gtk-gui\LAdd.PasswordDialog.cs" />
+    <Compile Include="DatabaseWindow.cs" />
+    <Compile Include="gtk-gui\LAdd.DatabaseWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
