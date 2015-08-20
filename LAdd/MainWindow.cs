@@ -23,13 +23,14 @@ using LAdd;
 #endif
 public partial class MainWindow: Gtk.Window
 {
+	private string titleLoadingText = "Loading ..."; 
 	private String approot;
 	private TreeStore ts;
 	private TreeView tv;
 	private SQLiteConnection dbConn = null;
 	private List<int> tsIdList = new List<int>();
 	private List<string> tsLinkList = new List<string>();
-	private bool deleteMode = false;
+	private string mode = "openlink";
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		this.SetPosition(Gtk.WindowPosition.Center);
@@ -75,10 +76,13 @@ public partial class MainWindow: Gtk.Window
 	void tvRowActivated (object o, RowActivatedArgs args)
 	{
 		int selectedRowNum = Convert.ToInt32(args.Path.ToString());
-		if (deleteMode)
-			_dbDeleteLinkById (tsIdList[selectedRowNum]);
-		else
-			_openLinkByUrl (tsLinkList[selectedRowNum]);
+		if (mode.Equals ("editlink")) {
+			//_dbDeleteLinkById (tsIdList[selectedRowNum]);
+		} else if (mode.Equals ("deletelink")) {
+			_dbDeleteLinkById (tsIdList [selectedRowNum]);
+		} else {
+			_openLinkByUrl (tsLinkList [selectedRowNum]);
+		}
 	}
 	private void fillLinksTreeFromDB(){
 
@@ -133,12 +137,12 @@ public partial class MainWindow: Gtk.Window
 	/*** remove the seleted link in the TreeStore ***/
 	protected void onRemoveLinkClicked (object sender, EventArgs e)
 	{
-		if (deleteMode) {
-			deleteMode = false;
-			labelTopStatus.Text = "";
-		} else {
+		if (!mode.Equals("deletelink")) {
+			mode = "deletelink";
 			labelTopStatus.Text = "Click on a link to delete it!";
-			deleteMode = true;
+		} else {
+			mode = "openlink";
+			labelTopStatus.Text = "";
 		}
 	}
 	private void _openLinkByUrl (string url){
@@ -208,7 +212,7 @@ public partial class MainWindow: Gtk.Window
 		SQLiteCommand cmd;
 		string updateTitlesQ = "";
 		dbConn.Open ();
-		string selectLinksWithTitleLoading = "select linkid, link from Links where title='Loading title ...';";
+		string selectLinksWithTitleLoading = "select linkid, link from Links where title='"+titleLoadingText+"';";
 		cmd = new SQLiteCommand(selectLinksWithTitleLoading, dbConn);
 		SQLiteDataReader reader = cmd.ExecuteReader();
 		while(reader.Read()){
@@ -268,11 +272,11 @@ public partial class MainWindow: Gtk.Window
 	protected void onBtnChooseDbClicked (object sender, EventArgs e)
 	{
 		Gtk.FileChooserDialog fcd = new Gtk.FileChooserDialog (
-			"Choose your links.db",
+			"Select links database file",
 			this,
 			FileChooserAction.Open,
 			"Cancal", ResponseType.Cancel,
-			"Choose", ResponseType.Accept
+			"Use this database", ResponseType.Accept
 		);
 		if (fcd.Run () == (int)ResponseType.Accept) {
 			if (System.IO.Path.GetExtension (fcd.Filename) == ".db") {
@@ -282,5 +286,15 @@ public partial class MainWindow: Gtk.Window
 			}
 		} else
 			fcd.Destroy ();
+	}
+	protected void onEditLinkAction (object sender, EventArgs e)
+	{
+		if (!mode.Equals("editlink")) {
+			mode = "editlink";
+			labelTopStatus.Text = "Click on a link to edit";
+		} else {
+			mode = "openlink";
+			labelTopStatus.Text = "";
+		} 
 	}
 }

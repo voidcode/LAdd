@@ -21,6 +21,10 @@ public partial class MainWindow
 	
 	private global::Gtk.Action refreshAction;
 	
+	private global::Gtk.Action editAction1;
+	
+	private global::Gtk.Action editLinkAction;
+	
 	private global::Gtk.VBox vbox1;
 	
 	private global::Gtk.HBox hbox2;
@@ -53,11 +57,11 @@ public partial class MainWindow
 		// Widget MainWindow
 		this.UIManager = new global::Gtk.UIManager ();
 		global::Gtk.ActionGroup w1 = new global::Gtk.ActionGroup ("Default");
-		this.pasteAction1 = new global::Gtk.Action ("pasteAction1", null, null, "gtk-paste");
+		this.pasteAction1 = new global::Gtk.Action ("pasteAction1", null, global::Mono.Unix.Catalog.GetString ("Add a link"), "gtk-paste");
 		w1.Add (this.pasteAction1, null);
 		this.copyAction = new global::Gtk.Action ("copyAction", null, null, "gtk-copy");
 		w1.Add (this.copyAction, null);
-		this.closeAction = new global::Gtk.Action ("closeAction", null, null, "gtk-close");
+		this.closeAction = new global::Gtk.Action ("closeAction", null, global::Mono.Unix.Catalog.GetString ("Delete links"), "gtk-close");
 		w1.Add (this.closeAction, null);
 		this.preferencesAction = new global::Gtk.Action ("preferencesAction", null, null, "gtk-preferences");
 		w1.Add (this.preferencesAction, null);
@@ -67,8 +71,12 @@ public partial class MainWindow
 		w1.Add (this.pasteAction, null);
 		this.refreshFetchOfTitles = new global::Gtk.Action ("refreshFetchOfTitles", null, null, "gtk-refresh");
 		w1.Add (this.refreshFetchOfTitles, null);
-		this.refreshAction = new global::Gtk.Action ("refreshAction", null, null, "gtk-refresh");
+		this.refreshAction = new global::Gtk.Action ("refreshAction", null, global::Mono.Unix.Catalog.GetString ("Fetch all 'Loading ...' titles by link"), "gtk-refresh");
 		w1.Add (this.refreshAction, null);
+		this.editAction1 = new global::Gtk.Action ("editAction1", null, null, "gtk-edit");
+		w1.Add (this.editAction1, null);
+		this.editLinkAction = new global::Gtk.Action ("editLinkAction", null, global::Mono.Unix.Catalog.GetString ("Edit links"), "gtk-edit");
+		w1.Add (this.editLinkAction, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -84,7 +92,7 @@ public partial class MainWindow
 		this.hbox2.Name = "hbox2";
 		this.hbox2.Spacing = 6;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><toolbar name='toolbar1'><toolitem name='pasteAction1' action='pasteAction1'/><toolitem name='closeAction' action='closeAction'/><toolitem name='refreshAction' action='refreshAction'/></toolbar></ui>");
+		this.UIManager.AddUiFromString ("<ui><toolbar name='toolbar1'><toolitem name='pasteAction1' action='pasteAction1'/><toolitem name='editLinkAction' action='editLinkAction'/><toolitem name='closeAction' action='closeAction'/><toolitem name='refreshAction' action='refreshAction'/></toolbar></ui>");
 		this.toolbar1 = ((global::Gtk.Toolbar)(this.UIManager.GetWidget ("/toolbar1")));
 		this.toolbar1.Name = "toolbar1";
 		this.toolbar1.ShowArrow = false;
@@ -140,6 +148,7 @@ public partial class MainWindow
 		this.hbox1.Spacing = 6;
 		// Container child hbox1.Gtk.Box+BoxChild
 		this.cbSearchFieldType = global::Gtk.ComboBox.NewText ();
+		this.cbSearchFieldType.TooltipMarkup = "Fliter search's by flags";
 		this.cbSearchFieldType.Name = "cbSearchFieldType";
 		this.hbox1.Add (this.cbSearchFieldType);
 		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.cbSearchFieldType]));
@@ -183,6 +192,7 @@ public partial class MainWindow
 		this.pasteAction1.Activated += new global::System.EventHandler (this.onAddLinkClicked);
 		this.closeAction.Activated += new global::System.EventHandler (this.onRemoveLinkClicked);
 		this.refreshAction.Activated += new global::System.EventHandler (this.onFetchTitles);
+		this.editLinkAction.Activated += new global::System.EventHandler (this.onEditLinkAction);
 		this.btnChooseDb.Clicked += new global::System.EventHandler (this.onBtnChooseDbClicked);
 		this.cbSearchFieldType.Changed += new global::System.EventHandler (this.onCbSearchFieldType);
 		this.searchEntry.Changed += new global::System.EventHandler (this.onCbSearchFieldType);

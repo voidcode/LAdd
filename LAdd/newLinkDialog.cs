@@ -21,6 +21,7 @@ namespace LAdd
 {
 	public partial class newLinkDialog : Gtk.Dialog
 	{
+		private string titleLoadingText = "Loading ..."; 
 		private string approot = AppDomain.CurrentDomain.BaseDirectory;
 		private SQLiteConnection dbConn;
 		public newLinkDialog ()
@@ -157,7 +158,7 @@ namespace LAdd
 		private void _getWebPageTitle(string url)
 		{
 			entryTitle.IsEditable = false;
-			entryTitle.Text = "Loading title ...";
+			entryTitle.Text = titleLoadingText;
 			// Create a request to the url
 			HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
 

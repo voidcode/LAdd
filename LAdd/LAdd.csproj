@@ -99,6 +99,8 @@
     <Compile Include="newLinkDialog.cs" />
     <Compile Include="gtk-gui\LAdd.newLinkDialog.cs" />
     <Compile Include="gtk-gui\MainWindow.cs" />
+    <Compile Include="PasswordDialog.cs" />
+    <Compile Include="gtk-gui\LAdd.PasswordDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
