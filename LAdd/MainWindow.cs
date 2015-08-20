@@ -159,9 +159,7 @@ public partial class MainWindow: Gtk.Window
 				//reload all links from table Links
 				dbConn.Close();
 				fillLinksTreeFromDB();
-			} else {
-				Console.WriteLine("DELETE: links with linkid=1 is delete from DB.");
-			}
+			} 
 			dbConn.Close();
 		} catch (SQLiteException error){
 			Console.Write (error.ToString());
@@ -208,42 +206,28 @@ public partial class MainWindow: Gtk.Window
 	}
 	//TODO 6 add/make so enduser can create new FlagTypes.
 	//TODO 7 test this app in on windows 7, 8...
-	private bool _fetAllLoadingTitlesLinks(){
-		SQLiteCommand cmd;
-		string updateTitlesQ = "";
-		dbConn.Open ();
-		string selectLinksWithTitleLoading = "select linkid, link from Links where title='"+titleLoadingText+"';";
-		cmd = new SQLiteCommand(selectLinksWithTitleLoading, dbConn);
-		SQLiteDataReader reader = cmd.ExecuteReader();
-		while(reader.Read()){
-			updateTitlesQ += "update Links set title='"+_getWebPageTitle(reader["link"].ToString())+"' where linkid="+reader["linkid"].ToString()+";";
-		}
-		Console.Write(updateTitlesQ);
-		cmd = new SQLiteCommand(updateTitlesQ, dbConn);
-		if(cmd.ExecuteNonQuery() > 0){
-			dbConn.Close ();
-			return true;	
-		} else {
-			dbConn.Close ();
-			return false;
-		}
-	}
 	protected void onFetchTitles (object sender, EventArgs e)
 	{
-		if (_fetAllLoadingTitlesLinks ()) 
-			fillLinksTreeFromDB ();
+		dbConn.Open ();
+		SQLiteCommand cmd = new SQLiteCommand(dbConn);
+		cmd.CommandText = "select linkid, link from Links where title='" + titleLoadingText + "';";
+		SQLiteDataReader reader = cmd.ExecuteReader();
+		while (reader.Read ()) { 
+			string _link = reader ["link"].ToString ();
+			string _linkid = reader ["linkid"].ToString ();
+			Thread th = new Thread (() =>_getWebPageTitleThenUpdateDB (_link, _linkid));
+			th.Start ();
+		}
+		dbConn.Close ();
 	}
-	private string _getWebPageTitle(string url)
+	private void _getWebPageTitleThenUpdateDB(string link, string linkid)
 	{
 		// Create a request to the url
-		HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
-
+		HttpWebRequest request = HttpWebRequest.Create(link) as HttpWebRequest;
 		// If the request wasn't an HTTP request (like a file), ignore it
 		//if (request == null) return null;
-
 		// Use the user's credentials
 		request.UseDefaultCredentials = true;
-
 		// Obtain a response from the server, if there was an error, return nothing
 		HttpWebResponse response = null;
 		try { 
@@ -256,19 +240,23 @@ public partial class MainWindow: Gtk.Window
 					// Download the page
 					WebClient web = new WebClient ();
 					web.UseDefaultCredentials = true;
-					string page = web.DownloadString (url);
-
+					string page = web.DownloadString (link);
 					// Extract the title
 					Regex ex = new Regex (regex, RegexOptions.IgnoreCase);
-
-					return ex.Match (page).Value.Trim ();
-				} else return "";
-			} else return "";
-		} catch (WebException) { 
-			return ""; 
+					dbConn.Open();
+					SQLiteCommand cmd = new SQLiteCommand(dbConn);
+					cmd.CommandText = "update Links set title=@title where linkid=@linkid;";
+					cmd.Parameters.AddWithValue("@title", ex.Match (page).Value.Trim ());
+					cmd.Parameters.AddWithValue("@linkid", linkid);
+					cmd.ExecuteNonQuery();
+					dbConn.Close();
+					fillLinksTreeFromDB();
+				}
+			}
+		} catch (WebException we) { 
+			Console.WriteLine (we.ToString());
 		}
 	}
-
 	protected void onBtnChooseDbClicked (object sender, EventArgs e)
 	{
 		Gtk.FileChooserDialog fcd = new Gtk.FileChooserDialog (
