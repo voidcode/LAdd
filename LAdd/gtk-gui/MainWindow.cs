@@ -25,6 +25,8 @@ public partial class MainWindow
 	
 	private global::Gtk.Action editLinkAction;
 	
+	private global::Gtk.Action Action;
+	
 	private global::Gtk.VBox vbox1;
 	
 	private global::Gtk.HBox hbox2;
@@ -43,13 +45,15 @@ public partial class MainWindow
 	
 	private global::Gtk.ScrolledWindow swLinks;
 	
+	private global::Gtk.Label labelStatus;
+	
 	private global::Gtk.HBox hbox1;
 	
 	private global::Gtk.ComboBox cbSearchFieldType;
 	
 	private global::Gtk.Entry searchEntry;
 	
-	private global::Gtk.Label GtkLabel2;
+	private global::Gtk.Label GtkLabelTitle;
 
 	protected virtual void Build ()
 	{
@@ -77,6 +81,8 @@ public partial class MainWindow
 		w1.Add (this.editAction1, null);
 		this.editLinkAction = new global::Gtk.Action ("editLinkAction", null, global::Mono.Unix.Catalog.GetString ("Edit links"), "gtk-edit");
 		w1.Add (this.editLinkAction, null);
+		this.Action = new global::Gtk.Action ("Action", null, null, null);
+		w1.Add (this.Action, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -92,7 +98,7 @@ public partial class MainWindow
 		this.hbox2.Name = "hbox2";
 		this.hbox2.Spacing = 6;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><toolbar name='toolbar1'><toolitem name='pasteAction1' action='pasteAction1'/><toolitem name='editLinkAction' action='editLinkAction'/><toolitem name='closeAction' action='closeAction'/><toolitem name='refreshAction' action='refreshAction'/></toolbar></ui>");
+		this.UIManager.AddUiFromString ("<ui><toolbar name='toolbar1'><toolitem name='pasteAction1' action='pasteAction1'/><toolitem name='editLinkAction' action='editLinkAction'/><toolitem name='closeAction' action='closeAction'/></toolbar></ui>");
 		this.toolbar1 = ((global::Gtk.Toolbar)(this.UIManager.GetWidget ("/toolbar1")));
 		this.toolbar1.Name = "toolbar1";
 		this.toolbar1.ShowArrow = false;
@@ -143,6 +149,15 @@ public partial class MainWindow
 		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.swLinks]));
 		w6.Position = 0;
 		// Container child vbox2.Gtk.Box+BoxChild
+		this.labelStatus = new global::Gtk.Label ();
+		this.labelStatus.Name = "labelStatus";
+		this.labelStatus.Xalign = 0F;
+		this.vbox2.Add (this.labelStatus);
+		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.labelStatus]));
+		w7.Position = 1;
+		w7.Expand = false;
+		w7.Fill = false;
+		// Container child vbox2.Gtk.Box+BoxChild
 		this.hbox1 = new global::Gtk.HBox ();
 		this.hbox1.Name = "hbox1";
 		this.hbox1.Spacing = 6;
@@ -151,10 +166,10 @@ public partial class MainWindow
 		this.cbSearchFieldType.TooltipMarkup = "Fliter search's by flags";
 		this.cbSearchFieldType.Name = "cbSearchFieldType";
 		this.hbox1.Add (this.cbSearchFieldType);
-		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.cbSearchFieldType]));
-		w7.Position = 0;
-		w7.Expand = false;
-		w7.Fill = false;
+		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.cbSearchFieldType]));
+		w8.Position = 0;
+		w8.Expand = false;
+		w8.Fill = false;
 		// Container child hbox1.Gtk.Box+BoxChild
 		this.searchEntry = new global::Gtk.Entry ();
 		this.searchEntry.CanFocus = true;
@@ -162,25 +177,25 @@ public partial class MainWindow
 		this.searchEntry.IsEditable = true;
 		this.searchEntry.InvisibleChar = '•';
 		this.hbox1.Add (this.searchEntry);
-		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.searchEntry]));
-		w8.Position = 1;
-		this.vbox2.Add (this.hbox1);
-		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
+		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.searchEntry]));
 		w9.Position = 1;
-		w9.Expand = false;
-		w9.Fill = false;
+		this.vbox2.Add (this.hbox1);
+		global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
+		w10.Position = 2;
+		w10.Expand = false;
+		w10.Fill = false;
 		this.GtkAlignment.Add (this.vbox2);
 		this.frame1.Add (this.GtkAlignment);
-		this.GtkLabel2 = new global::Gtk.Label ();
-		this.GtkLabel2.Name = "GtkLabel2";
-		this.GtkLabel2.Ypad = 5;
-		this.GtkLabel2.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>All links:</b>");
-		this.GtkLabel2.UseMarkup = true;
-		this.GtkLabel2.Justify = ((global::Gtk.Justification)(2));
-		this.frame1.LabelWidget = this.GtkLabel2;
+		this.GtkLabelTitle = new global::Gtk.Label ();
+		this.GtkLabelTitle.Name = "GtkLabelTitle";
+		this.GtkLabelTitle.Ypad = 5;
+		this.GtkLabelTitle.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>All links:</b>");
+		this.GtkLabelTitle.UseMarkup = true;
+		this.GtkLabelTitle.Justify = ((global::Gtk.Justification)(2));
+		this.frame1.LabelWidget = this.GtkLabelTitle;
 		this.vbox1.Add (this.frame1);
-		global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.frame1]));
-		w12.Position = 1;
+		global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.frame1]));
+		w13.Position = 1;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
@@ -191,7 +206,7 @@ public partial class MainWindow
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.pasteAction1.Activated += new global::System.EventHandler (this.onAddLinkClicked);
 		this.closeAction.Activated += new global::System.EventHandler (this.onRemoveLinkClicked);
-		this.refreshAction.Activated += new global::System.EventHandler (this.onFetchTitles);
+	
 		this.editLinkAction.Activated += new global::System.EventHandler (this.onEditLinkAction);
 		this.btnChooseDb.Clicked += new global::System.EventHandler (this.onBtnChooseDbClicked);
 		this.cbSearchFieldType.Changed += new global::System.EventHandler (this.onCbSearchFieldType);

@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Configuration;
 using System.IO;
 using System.Net;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
 using LAdd;
@@ -24,6 +23,7 @@ using LAdd;
 #endif
 public partial class MainWindow: Gtk.Window
 {
+	private Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
 	private string titleLoadingText = "Loading ..."; 
 	private TreeStore ts;
 	private TreeView tv;
@@ -31,26 +31,49 @@ public partial class MainWindow: Gtk.Window
 	private List<int> tsIdList = new List<int>();
 	private List<string> tsLinkList = new List<string>();
 	private string mode = "openlink";
-	private string dbPath = null;
+	private string selectedDbPath = null;
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
-		if (dbPath == null) {
-			DatabaseWindow db = new DatabaseWindow ();
-			db.ShowAll ();
-			buildWindow ();
-		} else buildWindow();
+		if (config.AppSettings.Settings.Count > 0) {
+			selectedDbPath = config.AppSettings.Settings ["selectedDbPath"].Value.ToString ();
+			labelStatus.Text = selectedDbPath;
+			dbConn = new SQLiteConnection ("Data Source="+selectedDbPath+".db");
+			fillLinksTreeFromDB ();
+		}
+		buildWindow();
+	}
+	private void load(){
+		fillLinksTreeFromDB ();
+		/*selectedDbPath = config.AppSettings.Settings ["selectedDbPath"].Value;
+		if (selectedDbPath != null) {
+			dbConn = new SQLiteConnection ("Data Source="+selectedDbPath);
+			labelStatus.Text = "Filter links in the: "+selectedDbPath ;
+			fillLinksTreeFromDB ();
+		}*/
+		/*
+		dbConn.Open ();
+		SQLiteCommand cmd = new SQLiteCommand(dbConn);
+		cmd.CommandText = "select linkid, link from Links where title='" + titleLoadingText + "';";
+		SQLiteDataReader reader = cmd.ExecuteReader();
+		while (reader.Read ()) { 
+			string _link = reader ["link"].ToString ();
+			string _linkid = reader ["linkid"].ToString ();
+			Thread th = new Thread (() =>_getWebPageTitleThenUpdateDB (_link, _linkid));
+			th.Start ();
+		}
+		dbConn.Close ();
+		*/
 	}
 	private void buildWindow(){
-		dbConn = new SQLiteConnection ("Data Source="+dbPath+".db");
 		this.SetPosition(Gtk.WindowPosition.Center);
 		buildLinksTree ();
 		fillCbSearchFieldType ();
 		fillLinksTreeFromDB ();
 		searchEntry.GrabFocus ();
 	}
-	private void setDbDataSource(string dbFolderPath, string databaseName){
-		dbConn = new SQLiteConnection ("Data Source="+dbFolderPath+databaseName);
+	private void updateDbDataSource(){
+		dbConn = new SQLiteConnection ("Data Source="+selectedDbPath);
 	}
 	protected void fillCbSearchFieldType(){
 		dbConn.Open ();
@@ -71,6 +94,9 @@ public partial class MainWindow: Gtk.Window
 		ts = new TreeStore (typeof(string), typeof(string), typeof(string), typeof(string));
 		tv = new TreeView (ts);
 		tv.HeadersVisible = true;
+
+		CellRendererText crt = new CellRendererText ();
+		crt.Ellipsize = Pango.EllipsizeMode.End;
 		//this tree has 3 columns Title, Link and Flag
 		tv.AppendColumn ("Title", new CellRendererText (), "text", 0);
 		tv.AppendColumn ("Flag", new CellRendererText (), "text", 1);
@@ -92,7 +118,6 @@ public partial class MainWindow: Gtk.Window
 		}
 	}
 	private void fillLinksTreeFromDB(){
-
 		//gets all links from table Links
 		//there is with join on FlagTypes Table
 		string selectAllLinksQ; 
@@ -114,7 +139,7 @@ public partial class MainWindow: Gtk.Window
 			tsIdList.Clear();
 			tsLinkList.Clear();
 			while(reader.Read()){
-				ts.AppendValues(rmColmentEnding(reader["title"].ToString()), reader["flagTitle"], reader["Link"]);
+				ts.AppendValues(reader["title"].ToString(), reader["flagTitle"], reader["Link"]);
 				tsIdList.Add(Convert.ToInt32(reader["linkid"]));
 				tsLinkList.Add(reader["Link"].ToString());
 			}
@@ -172,12 +197,6 @@ public partial class MainWindow: Gtk.Window
 			Console.Write (error.ToString());
 		}
 	}
-	private string rmColmentEnding(string t){
-		if(t.Length > 50)
-			return t.Substring(0, t.Length - (t.Length - 50)) + " ...";
-		else
-			return t;
-	}
 	private void _runLinkTreeSearch(){
 		//run a db-search base on entry-text lookup link where title like input
 		string searchQ; 
@@ -198,7 +217,7 @@ public partial class MainWindow: Gtk.Window
 			tsIdList.Clear();
 			tsLinkList.Clear();
 			while(reader.Read()){
-				ts.AppendValues(rmColmentEnding(reader["title"].ToString()), reader["flagTitle"], reader["Link"]);
+				ts.AppendValues(reader["title"].ToString(), reader["flagTitle"], reader["Link"]);
 				tsIdList.Add(Convert.ToInt32(reader["linkid"]));
 				tsLinkList.Add(reader["Link"].ToString());
 			}
@@ -213,20 +232,6 @@ public partial class MainWindow: Gtk.Window
 	}
 	//TODO 6 add/make so enduser can create new FlagTypes.
 	//TODO 7 test this app in on windows 7, 8...
-	protected void onFetchTitles (object sender, EventArgs e)
-	{
-		dbConn.Open ();
-		SQLiteCommand cmd = new SQLiteCommand(dbConn);
-		cmd.CommandText = "select linkid, link from Links where title='" + titleLoadingText + "';";
-		SQLiteDataReader reader = cmd.ExecuteReader();
-		while (reader.Read ()) { 
-			string _link = reader ["link"].ToString ();
-			string _linkid = reader ["linkid"].ToString ();
-			Thread th = new Thread (() =>_getWebPageTitleThenUpdateDB (_link, _linkid));
-			th.Start ();
-		}
-		dbConn.Close ();
-	}
 	private void _getWebPageTitleThenUpdateDB(string link, string linkid)
 	{
 		// Create a request to the url

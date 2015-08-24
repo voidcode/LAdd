@@ -33,6 +33,7 @@ namespace LAdd
 			global::Stetic.Gui.Initialize (this);
 			// Widget LAdd.newLinkDialog
 			this.Name = "LAdd.newLinkDialog";
+			this.Title = global::Mono.Unix.Catalog.GetString ("window1");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child LAdd.newLinkDialog.VBox
 			global::Gtk.VBox w1 = this.VBox;

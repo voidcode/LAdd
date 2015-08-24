@@ -1,20 +1,9 @@
 ﻿<Properties StartupItem="LAdd/LAdd.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="LAdd/gtk-gui/MainWindow.cs">
-    <Files>
-      <File FileName="LAdd/Properties/AssemblyInfo.cs" Line="1" Column="1" />
-      <File FileName="LAdd/MainWindow.cs" Line="216" Column="15" />
-      <File FileName="LAdd/gtk-gui/MainWindow.cs" Line="179" Column="39" />
-      <File FileName="LAdd/Program.cs" Line="1" Column="1" />
-      <File FileName="LAdd/newLinkDialog.cs" Line="48" Column="4" />
-      <File FileName="LAdd/webClass.cs" Line="1" Column="1" />
-      <File FileName="LAdd/packages.config" Line="1" Column="1" />
-      <File FileName="LAdd/PasswordDialog.cs" Line="1" Column="1" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <AuthorInfo Name="Terkel Sørensen" Email="support@gnusoft.net" Copyright="Terkel Sørensen" Company="GnuSoft.Net" Trademark="" />
+  <AuthorInfo Name="Terkel Sørensen" Email="jjiomax@outlook.com" Copyright="Terkel Sørensen" Company="" Trademark="" />
 </Properties>

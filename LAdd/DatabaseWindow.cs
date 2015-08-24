@@ -1,12 +1,13 @@
 ﻿using System;
+using System.IO;
 using Gtk;
 using System.Collections.Generic;
+using System.Configuration;
 #if __MonoCS__
 using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
 using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
 using SQLiteDataReader = Mono.Data.Sqlite.SqliteDataReader;
 using SQLiteException = Mono.Data.Sqlite.SqliteException;
-using System.IO;
 #else
 using SQLiteCommand = System.Data.SQLite.SQLiteCommand;
 using SQLiteConnection = System.Data.SQLite.SQLiteConnection;
@@ -17,6 +18,7 @@ namespace LAdd
 {
 	public partial class DatabaseWindow : Gtk.Window
 	{
+		private List<string> allDbPaths = new List<string> ();
 		private TreeStore ts;
 		private TreeView tv;
 		private SQLiteConnection dbConn;
@@ -28,18 +30,48 @@ namespace LAdd
 			this.SetPosition (Gtk.WindowPosition.Center);
 			//mkdir dbRootDir if not exists
 			if (!Directory.Exists (dbFolder)) Directory.CreateDirectory (dbFolder);
+			buildTv (); 
 			fillAllDbsIntoTv ();
 		}
-		protected void fillAllDbsIntoTv(){
-			ts = new TreeStore (typeof(string), typeof(string));
+		protected void buildTv(){
+			ts = new TreeStore (typeof(string));
 			tv = new TreeView (ts);
-			tv.HeadersVisible = true;
-			tv.AppendColumn("Databases", new CellRendererText(), "text", 0);
-			foreach(string f in Directory.GetFiles(dbFolder)) ts.AppendValues (f);
-			swDatabases.Add(tv);
+			tv.HeadersVisible = false;
+			CellRendererText crt = new CellRendererText ();
+			crt.Ellipsize = Pango.EllipsizeMode.End;
+			tv.AppendColumn("Databases", crt , "text", 0);
+
+			swDatabases.Add (tv);
 			swDatabases.ShowAll ();
-			//TODO fix / show all appendValues in swDatabases
+			tv.RowActivated += tvRowActivated;
 		}
+		protected void fillAllDbsIntoTv(){
+			ts.Clear ();
+			allDbPaths.Clear ();
+			foreach (string f in Directory.GetFiles(dbFolder)) { 
+				ts.AppendValues (System.IO.Path.GetFileName (f));
+				allDbPaths.Add (f);
+			}
+		}
+		/*on treeview tv on row-clciked*/
+		protected void tvRowActivated (object o, RowActivatedArgs args)
+		{
+			int _selectedRowNum = Convert.ToInt32(args.Path.ToString());
+			string _selectedDbPath =allDbPaths[_selectedRowNum];
+			string msg = "Do you want to switch to (" + System.IO.Path.GetFileName(_selectedDbPath)+ ") link-database?";
+			MessageDialog md = new MessageDialog (null, DialogFlags.Modal, MessageType.Question, ButtonsType.OkCancel, msg);
+			ResponseType rt = (ResponseType)md.Run ();
+			if (rt == ResponseType.Ok) {
+				Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+				//make changes
+				config.AppSettings.Settings.Add("selectedDbPath", _selectedDbPath);
+				//save to apply changes
+				config.Save(ConfigurationSaveMode.Modified);
+				ConfigurationManager.RefreshSection("appSettings");
+				this.Destroy();
+			}
+			md.Destroy ();
+		}	
 		protected void onCreateDatabase (object sender, EventArgs e)
 		{
 			string enName = entryDbName.Text.Trim ();
