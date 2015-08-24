@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Configuration;
 #if __MonoCS__
 	using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
 	using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
@@ -20,21 +21,35 @@ namespace LAdd
 {
 	public partial class newLinkDialog : Gtk.Dialog
 	{
-		private string titleLoadingText = "Loading ..."; 
-		private string approot = AppDomain.CurrentDomain.BaseDirectory;
-		private SQLiteConnection dbConn;
+		private string titleLoadingText = "Loading ...";
+		private string selectedDbPath;
+		private SQLiteConnection dbConn = new SQLiteConnection ();
+		private Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
 		public newLinkDialog ()
 		{
 			this.Build ();
 			this.SetPosition (Gtk.WindowPosition.Center);
-			dbConn = new SQLiteConnection ("Data Source="+approot+"LAdd.db, Version=3");
-			//TODO make set password / change password dialog / window ... dbConn
-			fillCbFlagWithAllFlagTypes ();
-			fillInputsFromClipboard ();
-			/* retry getting title if value enter in entryLink widget*/
-			entryLink.Activated += entryLink_activated;
-			entryLink.GrabFocus ();
-			Gtk.Clipboard.Get (Gdk.Selection.Clipboard).OwnerChange += onClipboardOwnerChange;
+			//get then set SQLconn by selectedDbPath from appconfig
+			if (config.AppSettings.Settings.Count > 0) {
+				selectedDbPath = config.AppSettings.Settings ["selectedDbPath"].Value.ToString ();
+				if (File.Exists (selectedDbPath)) {
+					dbConn.ConnectionString = "Data Source=" + selectedDbPath;
+
+					fillCbFlagWithAllFlagTypes ();
+					fillInputsFromClipboard ();
+
+					/* retry getting title if value enter in entryLink widget*/
+					entryLink.Activated += entryLink_activated;
+					entryLink.GrabFocus ();
+					Gtk.Clipboard.Get (Gdk.Selection.Clipboard).OwnerChange += onClipboardOwnerChange;
+				} else {
+					lockInputs ();
+				}
+			} else lockInputs ();
+		}
+		private void lockInputs (){
+			entryTitle.IsEditable = false;
+			entryLink.IsEditable = false;
 		}
 		protected void entryLink_activated (object sender, EventArgs e)
 		{

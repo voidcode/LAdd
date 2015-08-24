@@ -1,6 +1,12 @@
 ﻿<Properties StartupItem="LAdd/LAdd.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="LAdd/MainWindow.cs">
+    <Files>
+      <File FileName="LAdd/MainWindow.cs" Line="221" Column="21" />
+      <File FileName="LAdd/gtk-gui/MainWindow.cs" Line="1" Column="1" />
+      <File FileName="LAdd/newLinkDialog.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

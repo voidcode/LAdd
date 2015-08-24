@@ -45,7 +45,8 @@ namespace LAdd
 			this.notebook1 = new global::Gtk.Notebook ();
 			this.notebook1.CanFocus = true;
 			this.notebook1.Name = "notebook1";
-			this.notebook1.CurrentPage = 1;
+			this.notebook1.CurrentPage = 0;
+			this.notebook1.TabPos = ((global::Gtk.PositionType)(1));
 			this.notebook1.BorderWidth = ((uint)(6));
 			// Container child notebook1.Gtk.Notebook+NotebookChild
 			this.vbox2 = new global::Gtk.VBox ();

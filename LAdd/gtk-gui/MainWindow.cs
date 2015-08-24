@@ -5,33 +5,31 @@ public partial class MainWindow
 {
 	private global::Gtk.UIManager UIManager;
 	
-	private global::Gtk.Action pasteAction1;
-	
-	private global::Gtk.Action copyAction;
+	private global::Gtk.Action pasteAction;
 	
 	private global::Gtk.Action closeAction;
 	
-	private global::Gtk.Action preferencesAction;
-	
 	private global::Gtk.Action editAction;
-	
-	private global::Gtk.Action pasteAction;
-	
-	private global::Gtk.Action refreshFetchOfTitles;
-	
-	private global::Gtk.Action refreshAction;
-	
-	private global::Gtk.Action editAction1;
 	
 	private global::Gtk.Action editLinkAction;
 	
-	private global::Gtk.Action Action;
+	private global::Gtk.Action editAction1;
+	
+	private global::Gtk.Action refreshAction;
+	
+	private global::Gtk.Action pasteAction1;
+	
+	private global::Gtk.Action editAction2;
+	
+	private global::Gtk.Action deleteAction;
+	
+	private global::Gtk.Action refreshAction1;
 	
 	private global::Gtk.VBox vbox1;
 	
 	private global::Gtk.HBox hbox2;
 	
-	private global::Gtk.Toolbar toolbar1;
+	private global::Gtk.Toolbar toolbarMain;
 	
 	private global::Gtk.Label labelTopStatus;
 	
@@ -61,28 +59,26 @@ public partial class MainWindow
 		// Widget MainWindow
 		this.UIManager = new global::Gtk.UIManager ();
 		global::Gtk.ActionGroup w1 = new global::Gtk.ActionGroup ("Default");
-		this.pasteAction1 = new global::Gtk.Action ("pasteAction1", null, global::Mono.Unix.Catalog.GetString ("Add a link"), "gtk-paste");
-		w1.Add (this.pasteAction1, null);
-		this.copyAction = new global::Gtk.Action ("copyAction", null, null, "gtk-copy");
-		w1.Add (this.copyAction, null);
+		this.pasteAction = new global::Gtk.Action ("pasteAction", null, global::Mono.Unix.Catalog.GetString ("Add a link"), "gtk-paste");
+		w1.Add (this.pasteAction, null);
 		this.closeAction = new global::Gtk.Action ("closeAction", null, global::Mono.Unix.Catalog.GetString ("Delete links"), "gtk-close");
 		w1.Add (this.closeAction, null);
-		this.preferencesAction = new global::Gtk.Action ("preferencesAction", null, null, "gtk-preferences");
-		w1.Add (this.preferencesAction, null);
 		this.editAction = new global::Gtk.Action ("editAction", null, null, "gtk-edit");
 		w1.Add (this.editAction, null);
-		this.pasteAction = new global::Gtk.Action ("pasteAction", null, null, "gtk-paste");
-		w1.Add (this.pasteAction, null);
-		this.refreshFetchOfTitles = new global::Gtk.Action ("refreshFetchOfTitles", null, null, "gtk-refresh");
-		w1.Add (this.refreshFetchOfTitles, null);
-		this.refreshAction = new global::Gtk.Action ("refreshAction", null, global::Mono.Unix.Catalog.GetString ("Fetch all 'Loading ...' titles by link"), "gtk-refresh");
-		w1.Add (this.refreshAction, null);
-		this.editAction1 = new global::Gtk.Action ("editAction1", null, null, "gtk-edit");
-		w1.Add (this.editAction1, null);
 		this.editLinkAction = new global::Gtk.Action ("editLinkAction", null, global::Mono.Unix.Catalog.GetString ("Edit links"), "gtk-edit");
 		w1.Add (this.editLinkAction, null);
-		this.Action = new global::Gtk.Action ("Action", null, null, null);
-		w1.Add (this.Action, null);
+		this.editAction1 = new global::Gtk.Action ("editAction1", null, null, "gtk-edit");
+		w1.Add (this.editAction1, null);
+		this.refreshAction = new global::Gtk.Action ("refreshAction", null, null, "gtk-refresh");
+		w1.Add (this.refreshAction, null);
+		this.pasteAction1 = new global::Gtk.Action ("pasteAction1", null, global::Mono.Unix.Catalog.GetString ("Add a link"), "gtk-paste");
+		w1.Add (this.pasteAction1, null);
+		this.editAction2 = new global::Gtk.Action ("editAction2", null, global::Mono.Unix.Catalog.GetString ("Edit links"), "gtk-edit");
+		w1.Add (this.editAction2, null);
+		this.deleteAction = new global::Gtk.Action ("deleteAction", null, global::Mono.Unix.Catalog.GetString ("Delete links"), "gtk-delete");
+		w1.Add (this.deleteAction, null);
+		this.refreshAction1 = new global::Gtk.Action ("refreshAction1", null, global::Mono.Unix.Catalog.GetString ("Update"), "gtk-refresh");
+		w1.Add (this.refreshAction1, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -98,12 +94,12 @@ public partial class MainWindow
 		this.hbox2.Name = "hbox2";
 		this.hbox2.Spacing = 6;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><toolbar name='toolbar1'><toolitem name='pasteAction1' action='pasteAction1'/><toolitem name='editLinkAction' action='editLinkAction'/><toolitem name='closeAction' action='closeAction'/></toolbar></ui>");
-		this.toolbar1 = ((global::Gtk.Toolbar)(this.UIManager.GetWidget ("/toolbar1")));
-		this.toolbar1.Name = "toolbar1";
-		this.toolbar1.ShowArrow = false;
-		this.hbox2.Add (this.toolbar1);
-		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.toolbar1]));
+		this.UIManager.AddUiFromString ("<ui><toolbar name='toolbarMain'><toolitem name='pasteAction1' action='pasteAction1'/><toolitem name='editAction2' action='editAction2'/><toolitem name='deleteAction' action='deleteAction'/><toolitem name='refreshAction1' action='refreshAction1'/></toolbar></ui>");
+		this.toolbarMain = ((global::Gtk.Toolbar)(this.UIManager.GetWidget ("/toolbarMain")));
+		this.toolbarMain.Name = "toolbarMain";
+		this.toolbarMain.ShowArrow = false;
+		this.hbox2.Add (this.toolbarMain);
+		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.toolbarMain]));
 		w2.Position = 0;
 		// Container child hbox2.Gtk.Box+BoxChild
 		this.labelTopStatus = new global::Gtk.Label ();
@@ -122,7 +118,6 @@ public partial class MainWindow
 		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.btnChooseDb]));
 		w4.Position = 2;
 		w4.Expand = false;
-		w4.Fill = false;
 		this.vbox1.Add (this.hbox2);
 		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox2]));
 		w5.Position = 0;
@@ -204,10 +199,14 @@ public partial class MainWindow
 		this.DefaultHeight = 380;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
-		this.pasteAction1.Activated += new global::System.EventHandler (this.onAddLinkClicked);
-		this.closeAction.Activated += new global::System.EventHandler (this.onRemoveLinkClicked);
-	
+		this.pasteAction.Activated += new global::System.EventHandler (this.onAddLinkAction);
+		this.closeAction.Activated += new global::System.EventHandler (this.onRemoveLinkAction);
 		this.editLinkAction.Activated += new global::System.EventHandler (this.onEditLinkAction);
+		this.editAction1.Activated += new global::System.EventHandler (this.onEditLinkAction);
+		this.pasteAction1.Activated += new global::System.EventHandler (this.onAddLinkAction);
+		this.editAction2.Activated += new global::System.EventHandler (this.onEditLinkAction);
+		this.deleteAction.Activated += new global::System.EventHandler (this.onRemoveLinkAction);
+		this.refreshAction1.Activated += new global::System.EventHandler (this.onUpdateDataAction);
 		this.btnChooseDb.Clicked += new global::System.EventHandler (this.onBtnChooseDbClicked);
 		this.cbSearchFieldType.Changed += new global::System.EventHandler (this.onCbSearchFieldType);
 		this.searchEntry.Changed += new global::System.EventHandler (this.onCbSearchFieldType);

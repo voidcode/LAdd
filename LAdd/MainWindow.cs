@@ -27,7 +27,7 @@ public partial class MainWindow: Gtk.Window
 	private string titleLoadingText = "Loading ..."; 
 	private TreeStore ts;
 	private TreeView tv;
-	private SQLiteConnection dbConn = null;
+	private SQLiteConnection dbConn = new SQLiteConnection ();
 	private List<int> tsIdList = new List<int>();
 	private List<string> tsLinkList = new List<string>();
 	private string mode = "openlink";
@@ -35,13 +35,20 @@ public partial class MainWindow: Gtk.Window
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
+		this.SetPosition(Gtk.WindowPosition.Center);
 		if (config.AppSettings.Settings.Count > 0) {
 			selectedDbPath = config.AppSettings.Settings ["selectedDbPath"].Value.ToString ();
-			labelStatus.Text = selectedDbPath;
-			dbConn = new SQLiteConnection ("Data Source="+selectedDbPath+".db");
-			fillLinksTreeFromDB ();
+			if (File.Exists (selectedDbPath)) {
+				dbConn.ConnectionString = "Data Source=" + selectedDbPath;
+				buildLinksTree ();
+				fillCbSearchFieldType ();
+				fillLinksTreeFromDB ();
+				labelStatus.Text = selectedDbPath;
+				searchEntry.GrabFocus ();
+			} else {
+				labelStatus.Text = "You need to choose or an database!";
+			}
 		}
-		buildWindow();
 	}
 	private void load(){
 		fillLinksTreeFromDB ();
@@ -65,22 +72,13 @@ public partial class MainWindow: Gtk.Window
 		dbConn.Close ();
 		*/
 	}
-	private void buildWindow(){
-		this.SetPosition(Gtk.WindowPosition.Center);
-		buildLinksTree ();
-		fillCbSearchFieldType ();
-		fillLinksTreeFromDB ();
-		searchEntry.GrabFocus ();
-	}
-	private void updateDbDataSource(){
-		dbConn = new SQLiteConnection ("Data Source="+selectedDbPath);
-	}
 	protected void fillCbSearchFieldType(){
 		dbConn.Open ();
 		String getAllFlagTypesQ = "select * from FlagTypes;";
 		try {
 			SQLiteCommand cmd = new SQLiteCommand(getAllFlagTypesQ, dbConn);
 			SQLiteDataReader reader = cmd.ExecuteReader();
+			cbSearchFieldType.Clear();
 			while(reader.Read()){
 				cbSearchFieldType.AppendText (reader["title"].ToString());
 			}
@@ -154,7 +152,7 @@ public partial class MainWindow: Gtk.Window
 		a.RetVal = true;
 	}
 	/*** Show a dialog where enduser can add a new link to db. ***/
-	protected void onAddLinkClicked(object sender, EventArgs e)
+	protected void onAddLinkAction(object sender, EventArgs e)
 	{
 		//init of new/ add link dialog
 		LAdd.newLinkDialog newLinkDialog = new LAdd.newLinkDialog ();
@@ -167,7 +165,7 @@ public partial class MainWindow: Gtk.Window
 		fillLinksTreeFromDB ();
 	}
 	/*** remove the seleted link in the TreeStore ***/
-	protected void onRemoveLinkClicked (object sender, EventArgs e)
+	protected void onRemoveLinkAction (object sender, EventArgs e)
 	{
 		if (!mode.Equals("deletelink")) {
 			mode = "deletelink";
@@ -283,5 +281,20 @@ public partial class MainWindow: Gtk.Window
 			mode = "openlink";
 			labelTopStatus.Text = "";
 		} 
+	}
+	protected void onUpdateDataAction (object sender, EventArgs e){
+		config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+		if (config.AppSettings.Settings.Count > 0) {
+			selectedDbPath = config.AppSettings.Settings ["selectedDbPath"].Value.ToString ();
+			if (File.Exists (selectedDbPath)) {
+				dbConn.ConnectionString = "Data Source=" + selectedDbPath;
+				fillCbSearchFieldType ();
+				fillLinksTreeFromDB ();
+				labelStatus.Text = selectedDbPath;
+				searchEntry.GrabFocus ();
+			} else {
+				labelStatus.Text = "You need to choose or an database!";
+			}
+		}
 	}
 }

@@ -85,6 +85,8 @@ namespace LAdd
 						dbConn.SetPassword (enPassword);
 						appendSchemaToDB ();
 						fillAllDbsIntoTv ();
+						clearCreatePage ();
+						notebook1.PrevPage ();
 					} else
 						labelStatus.Text = "Password´s mush be 8 chars or longer!";
 				} else labelStatus.Text = "Password and Confirm password do not match!";
@@ -92,10 +94,18 @@ namespace LAdd
 				intiDb ();
 				appendSchemaToDB ();
 				fillAllDbsIntoTv ();
+				clearCreatePage ();
+				notebook1.PrevPage ();
 			} else {
 				labelStatus.Text = "You need to defind a database name!";
 				entryDbName.GrabFocus ();
 			}
+		}
+		private void clearCreatePage(){
+			entryDbName.Text = "";
+			entryPassword.Text = "";
+			entryConfirmPassword.Text = "";
+			labelStatus.Text = "";
 		}
 		private void intiDb(){
 			dbPath = dbFolder + entryDbName.Text.Trim () + ".db";

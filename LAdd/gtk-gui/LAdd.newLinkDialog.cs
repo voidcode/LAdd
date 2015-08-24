@@ -22,8 +22,6 @@ namespace LAdd
 		
 		private global::Gtk.Label labelStatus;
 		
-		private global::Gtk.Button btnPasteClipboardTextIntoEntryLink;
-		
 		private global::Gtk.Button buttonCancel;
 		
 		private global::Gtk.Button buttonOk;
@@ -33,7 +31,6 @@ namespace LAdd
 			global::Stetic.Gui.Initialize (this);
 			// Widget LAdd.newLinkDialog
 			this.Name = "LAdd.newLinkDialog";
-			this.Title = global::Mono.Unix.Catalog.GetString ("window1");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child LAdd.newLinkDialog.VBox
 			global::Gtk.VBox w1 = this.VBox;
@@ -136,17 +133,6 @@ namespace LAdd
 			w11.BorderWidth = ((uint)(5));
 			w11.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
-			this.btnPasteClipboardTextIntoEntryLink = new global::Gtk.Button ();
-			this.btnPasteClipboardTextIntoEntryLink.CanFocus = true;
-			this.btnPasteClipboardTextIntoEntryLink.Name = "btnPasteClipboardTextIntoEntryLink";
-			this.btnPasteClipboardTextIntoEntryLink.UseStock = true;
-			this.btnPasteClipboardTextIntoEntryLink.UseUnderline = true;
-			this.btnPasteClipboardTextIntoEntryLink.Label = "gtk-paste";
-			this.AddActionWidget (this.btnPasteClipboardTextIntoEntryLink, 0);
-			global::Gtk.ButtonBox.ButtonBoxChild w12 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w11 [this.btnPasteClipboardTextIntoEntryLink]));
-			w12.Expand = false;
-			w12.Fill = false;
-			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanDefault = true;
 			this.buttonCancel.CanFocus = true;
@@ -154,10 +140,9 @@ namespace LAdd
 			this.buttonCancel.UseUnderline = true;
 			this.buttonCancel.Label = global::Mono.Unix.Catalog.GetString ("_Cancel");
 			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w13 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w11 [this.buttonCancel]));
-			w13.Position = 1;
-			w13.Expand = false;
-			w13.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w12 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w11 [this.buttonCancel]));
+			w12.Expand = false;
+			w12.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonOk = new global::Gtk.Button ();
 			this.buttonOk.CanDefault = true;
@@ -166,17 +151,16 @@ namespace LAdd
 			this.buttonOk.UseUnderline = true;
 			this.buttonOk.Label = global::Mono.Unix.Catalog.GetString ("_Save");
 			this.AddActionWidget (this.buttonOk, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w14 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w11 [this.buttonOk]));
-			w14.Position = 2;
-			w14.Expand = false;
-			w14.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w13 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w11 [this.buttonOk]));
+			w13.Position = 1;
+			w13.Expand = false;
+			w13.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
 			this.DefaultWidth = 289;
 			this.DefaultHeight = 255;
 			this.Show ();
-			this.btnPasteClipboardTextIntoEntryLink.Clicked += new global::System.EventHandler (this.onBtnPasteClipboardTextIntoEntryLinkClicked);
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.newLinkDialog_btnClose);
 			this.buttonOk.Clicked += new global::System.EventHandler (this.newLinkDialog_btnOk);
 		}
