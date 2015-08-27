@@ -27,6 +27,7 @@ namespace LAdd
 		public DatabaseWindow () : base (Gtk.WindowType.Toplevel)
 		{
 			this.Build ();
+			this.Title = "Database's";
 			this.SetPosition (Gtk.WindowPosition.Center);
 			//mkdir dbRootDir if not exists
 			if (!Directory.Exists (dbFolder)) Directory.CreateDirectory (dbFolder);

@@ -41,7 +41,7 @@ public partial class MainWindow: Gtk.Window
 			if (File.Exists (selectedDbPath)) {
 				dbConn.ConnectionString = "Data Source=" + selectedDbPath;
 				buildLinksTree ();
-				fillCbSearchFieldType ();
+				fillCbFlagWithAllFlagTypes ();
 				fillLinksTreeFromDB ();
 				labelStatus.Text = selectedDbPath;
 				searchEntry.GrabFocus ();
@@ -72,13 +72,12 @@ public partial class MainWindow: Gtk.Window
 		dbConn.Close ();
 		*/
 	}
-	protected void fillCbSearchFieldType(){
+	private void fillCbFlagWithAllFlagTypes(){
 		dbConn.Open ();
 		String getAllFlagTypesQ = "select * from FlagTypes;";
 		try {
 			SQLiteCommand cmd = new SQLiteCommand(getAllFlagTypesQ, dbConn);
 			SQLiteDataReader reader = cmd.ExecuteReader();
-			cbSearchFieldType.Clear();
 			while(reader.Read()){
 				cbSearchFieldType.AppendText (reader["title"].ToString());
 			}
@@ -288,8 +287,9 @@ public partial class MainWindow: Gtk.Window
 			selectedDbPath = config.AppSettings.Settings ["selectedDbPath"].Value.ToString ();
 			if (File.Exists (selectedDbPath)) {
 				dbConn.ConnectionString = "Data Source=" + selectedDbPath;
-				fillCbSearchFieldType ();
 				fillLinksTreeFromDB ();
+				//TODO clearCbFlag
+				fillCbFlagWithAllFlagTypes ();
 				labelStatus.Text = selectedDbPath;
 				searchEntry.GrabFocus ();
 			} else {

@@ -1,4 +1,5 @@
 ﻿using System;
+using Gtk;
 using System.Data;
 using System.Collections.Generic;
 using System.IO;
@@ -171,7 +172,6 @@ namespace LAdd
 		 * http://blogs.msdn.com/b/noahc/archive/2007/02/19/get-a-web-page-s-title-from-a-url-c.aspx */
 		private void _getWebPageTitle(string url)
 		{
-			entryTitle.IsEditable = false;
 			entryTitle.Text = titleLoadingText;
 			// Create a request to the url
 			HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
@@ -200,13 +200,51 @@ namespace LAdd
 					Regex ex = new Regex (regex, RegexOptions.IgnoreCase);
 					entryTitle.Text = "";
 					entryTitle.Text = ex.Match (page).Value.Trim ();
-					entryTitle.IsEditable = true;
 				} else {
 					entryLink.Text = "";
-					entryTitle.IsEditable = true;
 				}
 			} catch (WebException) { 
 				//return null; 
+			}
+		}
+		protected void onAddNewFalgType (object sender, EventArgs e)
+		{
+			if (enFlagtitle.Text.Length > 0) {
+				string addQ = "insert into FlagTypes (title) values ('"+enFlagtitle.Text+"');";
+				SQLiteCommand cmd = new SQLiteCommand (addQ, dbConn);
+				dbConn.Open ();
+				if (cmd.ExecuteNonQuery () > 0){
+					dbConn.Close ();
+					labelStatus.Text = enFlagtitle.Text + " falg is added!";
+					enFlagtitle.Text = "";
+					fillCbFlagWithAllFlagTypes ();
+				} else{
+					dbConn.Close ();
+					labelStatus.Text = enFlagtitle.Text + " falg is NOT added!";
+				}
+			} else {
+				labelStatus.Text = "You need to defind a flagname!";
+				enFlagtitle.GrabFocus ();
+			}
+		}
+		protected void onRemoveNewFalgType (object sender, EventArgs e)
+		{
+			if (enFlagtitle.Text.Length > 0) {
+				string removeQ = "delete from FlagTypes where flagid=(select flagid from FlagTypes where title='"+enFlagtitle.Text+"');";
+				SQLiteCommand cmd = new SQLiteCommand (removeQ, dbConn);
+				dbConn.Open ();
+				if (cmd.ExecuteNonQuery () > 0) {
+					labelStatus.Text = cbFlag.ActiveText + " is removed!";
+					enFlagtitle.Text = "";
+					dbConn.Close ();
+					fillCbFlagWithAllFlagTypes ();
+				} else {
+					dbConn.Close ();
+					labelStatus.Text = (cbFlag.ActiveText != null) ? (cbFlag.ActiveText + " is NOT removed!") : "Flag is NOT removed!";
+				}
+			} else {
+				labelStatus.Text = "You need to defind a flagname!";
+				enFlagtitle.GrabFocus ();
 			}
 		}
 	}
