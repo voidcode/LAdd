@@ -297,4 +297,10 @@ public partial class MainWindow: Gtk.Window
 			}
 		}
 	}
+
+	protected void onShare (object sender, EventArgs e)
+	{
+		EmailDialog ed = new EmailDialog ();
+		ed.ShowAll ();
+	}
 }

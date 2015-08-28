@@ -62,6 +62,7 @@ namespace LAdd
 			this.entryTitle.CanFocus = true;
 			this.entryTitle.Name = "entryTitle";
 			this.entryTitle.IsEditable = true;
+			this.entryTitle.InvisibleChar = '•';
 			this.vbox2.Add (this.entryTitle);
 			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.entryTitle]));
 			w4.Position = 2;
@@ -83,6 +84,7 @@ namespace LAdd
 			this.entryLink.CanFocus = true;
 			this.entryLink.Name = "entryLink";
 			this.entryLink.IsEditable = true;
+			this.entryLink.InvisibleChar = '•';
 			this.vbox2.Add (this.entryLink);
 			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.entryLink]));
 			w6.Position = 4;
@@ -125,6 +127,7 @@ namespace LAdd
 			this.enFlagtitle.CanFocus = true;
 			this.enFlagtitle.Name = "enFlagtitle";
 			this.enFlagtitle.IsEditable = true;
+			this.enFlagtitle.InvisibleChar = '•';
 			this.hbox2.Add (this.enFlagtitle);
 			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.enFlagtitle]));
 			w10.Position = 0;

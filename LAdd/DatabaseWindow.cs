@@ -35,13 +35,12 @@ namespace LAdd
 			fillAllDbsIntoTv ();
 		}
 		protected void buildTv(){
-			ts = new TreeStore (typeof(string));
+			ts = new TreeStore (typeof(string), typeof(ComboBoxEntry));
 			tv = new TreeView (ts);
 			tv.HeadersVisible = false;
 			CellRendererText crt = new CellRendererText ();
 			crt.Ellipsize = Pango.EllipsizeMode.End;
 			tv.AppendColumn("Databases", crt , "text", 0);
-
 			swDatabases.Add (tv);
 			swDatabases.ShowAll ();
 			tv.RowActivated += tvRowActivated;

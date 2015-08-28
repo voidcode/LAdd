@@ -214,6 +214,7 @@ public partial class MainWindow
 		this.deleteAction.Activated += new global::System.EventHandler (this.onRemoveLinkAction);
 		this.refreshAction1.Activated += new global::System.EventHandler (this.onUpdateDataAction);
 		this.btnChooseDb.Clicked += new global::System.EventHandler (this.onBtnChooseDbClicked);
+		this.btnShareDB.Clicked += new global::System.EventHandler (this.onShare);
 		this.cbSearchFieldType.Changed += new global::System.EventHandler (this.onCbSearchFieldType);
 		this.searchEntry.Changed += new global::System.EventHandler (this.onCbSearchFieldType);
 		this.searchEntry.Activated += new global::System.EventHandler (this.onCbSearchFieldType);
