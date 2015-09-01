@@ -4,16 +4,29 @@ namespace LAdd
 {
 	public partial class EmailDialog
 	{
+		private global::Gtk.Notebook notebook1;
 		private global::Gtk.Alignment GtkAlignment2;
 		private global::Gtk.VBox vbox3;
 		private global::Gtk.Label label1;
 		private global::Gtk.Entry enFrom;
 		private global::Gtk.Label label2;
 		private global::Gtk.Entry enTo;
-		private global::Gtk.Label labelSubject;
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
-		private global::Gtk.TextView tvSubject;
+		private global::Gtk.TextView tvMessage;
 		private global::Gtk.Label labelStatus;
+		private global::Gtk.Label label6;
+		private global::Gtk.VBox vbox4;
+		private global::Gtk.Label label4;
+		private global::Gtk.FileChooserButton filechooserbutton1;
+		private global::Gtk.Label label11;
+		private global::Gtk.ComboBox combobox2;
+		private global::Gtk.Label label3;
+		private global::Gtk.HBox hbox1;
+		private global::Gtk.Entry entry3;
+		private global::Gtk.CheckButton cbUsePassword;
+		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
+		private global::Gtk.TextView textview3;
+		private global::Gtk.Label label7;
 		private global::Gtk.Button buttonCancel;
 		private global::Gtk.Button btnSendEmail;
 
@@ -29,9 +42,15 @@ namespace LAdd
 			w1.Name = "dialog1_VBox";
 			w1.BorderWidth = ((uint)(2));
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
+			this.notebook1 = new global::Gtk.Notebook ();
+			this.notebook1.CanFocus = true;
+			this.notebook1.Name = "notebook1";
+			this.notebook1.CurrentPage = 1;
+			// Container child notebook1.Gtk.Notebook+NotebookChild
 			this.GtkAlignment2 = new global::Gtk.Alignment (0F, 0F, 1F, 1F);
 			this.GtkAlignment2.Name = "GtkAlignment2";
 			this.GtkAlignment2.LeftPadding = ((uint)(12));
+			this.GtkAlignment2.BorderWidth = ((uint)(15));
 			// Container child GtkAlignment2.Gtk.Container+ContainerChild
 			this.vbox3 = new global::Gtk.VBox ();
 			this.vbox3.Name = "vbox3";
@@ -79,47 +98,148 @@ namespace LAdd
 			w5.Expand = false;
 			w5.Fill = false;
 			// Container child vbox3.Gtk.Box+BoxChild
-			this.labelSubject = new global::Gtk.Label ();
-			this.labelSubject.Name = "labelSubject";
-			this.labelSubject.Xalign = 0F;
-			this.labelSubject.LabelProp = global::Mono.Unix.Catalog.GetString ("Subject");
-			this.vbox3.Add (this.labelSubject);
-			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.labelSubject]));
-			w6.Position = 4;
-			w6.Expand = false;
-			w6.Fill = false;
-			// Container child vbox3.Gtk.Box+BoxChild
 			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 			this.GtkScrolledWindow.HscrollbarPolicy = ((global::Gtk.PolicyType)(2));
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
-			this.tvSubject = new global::Gtk.TextView ();
-			this.tvSubject.CanFocus = true;
-			this.tvSubject.Name = "tvSubject";
-			this.GtkScrolledWindow.Add (this.tvSubject);
+			this.tvMessage = new global::Gtk.TextView ();
+			this.tvMessage.CanFocus = true;
+			this.tvMessage.Name = "tvMessage";
+			this.GtkScrolledWindow.Add (this.tvMessage);
 			this.vbox3.Add (this.GtkScrolledWindow);
-			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.GtkScrolledWindow]));
-			w8.Position = 5;
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.GtkScrolledWindow]));
+			w7.Position = 4;
 			// Container child vbox3.Gtk.Box+BoxChild
 			this.labelStatus = new global::Gtk.Label ();
 			this.labelStatus.Name = "labelStatus";
 			this.labelStatus.Xalign = 1F;
 			this.vbox3.Add (this.labelStatus);
-			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.labelStatus]));
-			w9.Position = 6;
-			w9.Expand = false;
-			w9.Fill = false;
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.labelStatus]));
+			w8.Position = 5;
+			w8.Expand = false;
+			w8.Fill = false;
 			this.GtkAlignment2.Add (this.vbox3);
-			w1.Add (this.GtkAlignment2);
-			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(w1 [this.GtkAlignment2]));
+			this.notebook1.Add (this.GtkAlignment2);
+			// Notebook tab
+			this.label6 = new global::Gtk.Label ();
+			this.label6.Name = "label6";
+			this.label6.LabelProp = global::Mono.Unix.Catalog.GetString ("Email");
+			this.notebook1.SetTabLabel (this.GtkAlignment2, this.label6);
+			this.label6.ShowAll ();
+			// Container child notebook1.Gtk.Notebook+NotebookChild
+			this.vbox4 = new global::Gtk.VBox ();
+			this.vbox4.Name = "vbox4";
+			this.vbox4.Spacing = 6;
+			this.vbox4.BorderWidth = ((uint)(18));
+			// Container child vbox4.Gtk.Box+BoxChild
+			this.label4 = new global::Gtk.Label ();
+			this.label4.Name = "label4";
+			this.label4.Xalign = 0F;
+			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Thumbnail</b>");
+			this.label4.UseMarkup = true;
+			this.vbox4.Add (this.label4);
+			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.label4]));
 			w11.Position = 0;
+			w11.Expand = false;
+			w11.Fill = false;
+			// Container child vbox4.Gtk.Box+BoxChild
+			this.filechooserbutton1 = new global::Gtk.FileChooserButton (global::Mono.Unix.Catalog.GetString ("Select a File"), ((global::Gtk.FileChooserAction)(0)));
+			this.filechooserbutton1.Name = "filechooserbutton1";
+			this.vbox4.Add (this.filechooserbutton1);
+			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.filechooserbutton1]));
+			w12.Position = 1;
+			w12.Expand = false;
+			w12.Fill = false;
+			// Container child vbox4.Gtk.Box+BoxChild
+			this.label11 = new global::Gtk.Label ();
+			this.label11.Name = "label11";
+			this.label11.Xalign = 0F;
+			this.label11.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Use this layout</b>");
+			this.label11.UseMarkup = true;
+			this.vbox4.Add (this.label11);
+			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.label11]));
+			w13.Position = 2;
+			w13.Expand = false;
+			// Container child vbox4.Gtk.Box+BoxChild
+			this.combobox2 = global::Gtk.ComboBox.NewText ();
+			this.combobox2.Name = "combobox2";
+			this.vbox4.Add (this.combobox2);
+			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.combobox2]));
+			w14.Position = 3;
+			w14.Expand = false;
+			w14.Fill = false;
+			// Container child vbox4.Gtk.Box+BoxChild
+			this.label3 = new global::Gtk.Label ();
+			this.label3.Name = "label3";
+			this.label3.Xalign = 0F;
+			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Use password on this webpage</b>");
+			this.label3.UseMarkup = true;
+			this.vbox4.Add (this.label3);
+			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.label3]));
+			w15.Position = 4;
+			w15.Expand = false;
+			w15.Fill = false;
+			// Container child vbox4.Gtk.Box+BoxChild
+			this.hbox1 = new global::Gtk.HBox ();
+			this.hbox1.Name = "hbox1";
+			this.hbox1.Spacing = 6;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.entry3 = new global::Gtk.Entry ();
+			this.entry3.CanFocus = true;
+			this.entry3.Name = "entry3";
+			this.entry3.IsEditable = true;
+			this.entry3.InvisibleChar = '●';
+			this.hbox1.Add (this.entry3);
+			global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.entry3]));
+			w16.Position = 0;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.cbUsePassword = new global::Gtk.CheckButton ();
+			this.cbUsePassword.CanFocus = true;
+			this.cbUsePassword.Name = "cbUsePassword";
+			this.cbUsePassword.Label = global::Mono.Unix.Catalog.GetString ("Enable password");
+			this.cbUsePassword.DrawIndicator = true;
+			this.cbUsePassword.UseUnderline = true;
+			this.hbox1.Add (this.cbUsePassword);
+			global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.cbUsePassword]));
+			w17.Position = 1;
+			this.vbox4.Add (this.hbox1);
+			global::Gtk.Box.BoxChild w18 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox1]));
+			w18.Position = 5;
+			w18.Expand = false;
+			w18.Fill = false;
+			// Container child vbox4.Gtk.Box+BoxChild
+			this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow ();
+			this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
+			this.GtkScrolledWindow1.VscrollbarPolicy = ((global::Gtk.PolicyType)(2));
+			this.GtkScrolledWindow1.HscrollbarPolicy = ((global::Gtk.PolicyType)(2));
+			// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
+			this.textview3 = new global::Gtk.TextView ();
+			this.textview3.Buffer.Text = "Convert an LAdd link-database into a webpage.\n\nPress 'Post' then you will get an url like.\n\nhttps://ladd.site/45DFssfresredfgd456ehTetu4";
+			this.textview3.CanFocus = true;
+			this.textview3.Name = "textview3";
+			this.GtkScrolledWindow1.Add (this.textview3);
+			this.vbox4.Add (this.GtkScrolledWindow1);
+			global::Gtk.Box.BoxChild w20 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.GtkScrolledWindow1]));
+			w20.Position = 6;
+			this.notebook1.Add (this.vbox4);
+			global::Gtk.Notebook.NotebookChild w21 = ((global::Gtk.Notebook.NotebookChild)(this.notebook1 [this.vbox4]));
+			w21.Position = 1;
+			// Notebook tab
+			this.label7 = new global::Gtk.Label ();
+			this.label7.Name = "label7";
+			this.label7.LabelProp = global::Mono.Unix.Catalog.GetString ("Ladd.site");
+			this.notebook1.SetTabLabel (this.vbox4, this.label7);
+			this.label7.ShowAll ();
+			w1.Add (this.notebook1);
+			global::Gtk.Box.BoxChild w22 = ((global::Gtk.Box.BoxChild)(w1 [this.notebook1]));
+			w22.Position = 0;
 			// Internal child LAdd.EmailDialog.ActionArea
-			global::Gtk.HButtonBox w12 = this.ActionArea;
-			w12.Name = "dialog1_ActionArea";
-			w12.Spacing = 10;
-			w12.BorderWidth = ((uint)(5));
-			w12.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			global::Gtk.HButtonBox w23 = this.ActionArea;
+			w23.Name = "dialog1_ActionArea";
+			w23.Spacing = 10;
+			w23.BorderWidth = ((uint)(5));
+			w23.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanDefault = true;
@@ -129,27 +249,28 @@ namespace LAdd
 			this.buttonCancel.UseUnderline = true;
 			this.buttonCancel.Label = "gtk-cancel";
 			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w13 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w12 [this.buttonCancel]));
-			w13.Expand = false;
-			w13.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w24 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w23 [this.buttonCancel]));
+			w24.Expand = false;
+			w24.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.btnSendEmail = new global::Gtk.Button ();
 			this.btnSendEmail.CanDefault = true;
 			this.btnSendEmail.CanFocus = true;
 			this.btnSendEmail.Name = "btnSendEmail";
 			this.btnSendEmail.UseUnderline = true;
-			this.btnSendEmail.Label = global::Mono.Unix.Catalog.GetString ("Send");
+			this.btnSendEmail.Label = global::Mono.Unix.Catalog.GetString ("Post");
 			this.AddActionWidget (this.btnSendEmail, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w14 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w12 [this.btnSendEmail]));
-			w14.Position = 1;
-			w14.Expand = false;
-			w14.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w25 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w23 [this.btnSendEmail]));
+			w25.Position = 1;
+			w25.Expand = false;
+			w25.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 301;
-			this.DefaultHeight = 270;
+			this.DefaultWidth = 385;
+			this.DefaultHeight = 375;
 			this.Show ();
+			this.buttonCancel.Clicked += new global::System.EventHandler (this.onCancal);
 			this.btnSendEmail.Clicked += new global::System.EventHandler (this.onSendEmail);
 		}
 	}

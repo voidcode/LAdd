@@ -20,13 +20,14 @@ public partial class MainWindow
 	private global::Gtk.Button btnChooseDb;
 	private global::Gtk.Button btnShareDB;
 	private global::Gtk.Frame frame1;
-	private global::Gtk.Alignment GtkAlignment;
+	private global::Gtk.Alignment GtkAlignment1;
 	private global::Gtk.VBox vbox2;
 	private global::Gtk.ScrolledWindow swLinks;
 	private global::Gtk.Label labelStatus;
 	private global::Gtk.HBox hbox1;
 	private global::Gtk.ComboBox cbSearchFieldType;
 	private global::Gtk.Entry searchEntry;
+	private global::Gtk.ComboBox cbOnlySearchOnColumns;
 	private global::Gtk.Label GtkLabelTitle;
 
 	protected virtual void Build ()
@@ -134,10 +135,10 @@ public partial class MainWindow
 		this.frame1.ShadowType = ((global::Gtk.ShadowType)(0));
 		this.frame1.BorderWidth = ((uint)(3));
 		// Container child frame1.Gtk.Container+ContainerChild
-		this.GtkAlignment = new global::Gtk.Alignment (0F, 0F, 1F, 1F);
-		this.GtkAlignment.Name = "GtkAlignment";
-		this.GtkAlignment.LeftPadding = ((uint)(12));
-		// Container child GtkAlignment.Gtk.Container+ContainerChild
+		this.GtkAlignment1 = new global::Gtk.Alignment (0F, 0F, 1F, 1F);
+		this.GtkAlignment1.Name = "GtkAlignment1";
+		this.GtkAlignment1.LeftPadding = ((uint)(12));
+		// Container child GtkAlignment1.Gtk.Container+ContainerChild
 		this.vbox2 = new global::Gtk.VBox ();
 		this.vbox2.Name = "vbox2";
 		this.vbox2.Spacing = 6;
@@ -145,6 +146,7 @@ public partial class MainWindow
 		this.swLinks = new global::Gtk.ScrolledWindow ();
 		this.swLinks.CanFocus = true;
 		this.swLinks.Name = "swLinks";
+		this.swLinks.ShadowType = ((global::Gtk.ShadowType)(1));
 		this.vbox2.Add (this.swLinks);
 		global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.swLinks]));
 		w15.Position = 0;
@@ -180,13 +182,21 @@ public partial class MainWindow
 		this.hbox1.Add (this.searchEntry);
 		global::Gtk.Box.BoxChild w18 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.searchEntry]));
 		w18.Position = 1;
-		this.vbox2.Add (this.hbox1);
-		global::Gtk.Box.BoxChild w19 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
+		// Container child hbox1.Gtk.Box+BoxChild
+		this.cbOnlySearchOnColumns = global::Gtk.ComboBox.NewText ();
+		this.cbOnlySearchOnColumns.Name = "cbOnlySearchOnColumns";
+		this.hbox1.Add (this.cbOnlySearchOnColumns);
+		global::Gtk.Box.BoxChild w19 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.cbOnlySearchOnColumns]));
 		w19.Position = 2;
 		w19.Expand = false;
 		w19.Fill = false;
-		this.GtkAlignment.Add (this.vbox2);
-		this.frame1.Add (this.GtkAlignment);
+		this.vbox2.Add (this.hbox1);
+		global::Gtk.Box.BoxChild w20 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
+		w20.Position = 2;
+		w20.Expand = false;
+		w20.Fill = false;
+		this.GtkAlignment1.Add (this.vbox2);
+		this.frame1.Add (this.GtkAlignment1);
 		this.GtkLabelTitle = new global::Gtk.Label ();
 		this.GtkLabelTitle.Name = "GtkLabelTitle";
 		this.GtkLabelTitle.Ypad = 5;
@@ -195,8 +205,8 @@ public partial class MainWindow
 		this.GtkLabelTitle.Justify = ((global::Gtk.Justification)(2));
 		this.frame1.LabelWidget = this.GtkLabelTitle;
 		this.vbox1.Add (this.frame1);
-		global::Gtk.Box.BoxChild w22 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.frame1]));
-		w22.Position = 1;
+		global::Gtk.Box.BoxChild w23 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.frame1]));
+		w23.Position = 1;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
@@ -216,7 +226,10 @@ public partial class MainWindow
 		this.btnChooseDb.Clicked += new global::System.EventHandler (this.onBtnChooseDbClicked);
 		this.btnShareDB.Clicked += new global::System.EventHandler (this.onShare);
 		this.cbSearchFieldType.Changed += new global::System.EventHandler (this.onCbSearchFieldType);
-		this.searchEntry.Changed += new global::System.EventHandler (this.onCbSearchFieldType);
+		this.cbSearchFieldType.ButtonReleaseEvent += new global::Gtk.ButtonReleaseEventHandler (this.onCbSearchFieldType);
 		this.searchEntry.Activated += new global::System.EventHandler (this.onCbSearchFieldType);
+		this.searchEntry.Changed += new global::System.EventHandler (this.onCbSearchFieldType);
+		this.cbOnlySearchOnColumns.Changed += new global::System.EventHandler (this.onCbSearchFieldType);
+		this.cbOnlySearchOnColumns.ButtonReleaseEvent += new global::Gtk.ButtonReleaseEventHandler (this.onCbSearchFieldType);
 	}
 }

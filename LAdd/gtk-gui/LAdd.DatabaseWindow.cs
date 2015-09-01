@@ -187,7 +187,7 @@ namespace LAdd
 				this.Child.ShowAll ();
 			}
 			this.DefaultWidth = 436;
-			this.DefaultHeight = 166;
+			this.DefaultHeight = 173;
 			this.Show ();
 			this.btnCreateDb.Clicked += new global::System.EventHandler (this.onCreateDatabase);
 		}

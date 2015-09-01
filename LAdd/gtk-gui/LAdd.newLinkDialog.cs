@@ -235,10 +235,11 @@ namespace LAdd
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 313;
-			this.DefaultHeight = 283;
+			this.DefaultWidth = 329;
+			this.DefaultHeight = 292;
 			this.Show ();
 			this.btnAddNewFalgType.Clicked += new global::System.EventHandler (this.onAddNewFalgType);
+			this.btnRemoveNewFalgType.Clicked += new global::System.EventHandler (this.onRemoveFlagType);
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.newLinkDialog_btnClose);
 			this.buttonOk.Clicked += new global::System.EventHandler (this.newLinkDialog_btnOk);
 		}

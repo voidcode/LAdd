@@ -38,16 +38,42 @@ public partial class MainWindow: Gtk.Window
 		this.SetPosition(Gtk.WindowPosition.Center);
 		if (config.AppSettings.Settings.Count > 0) {
 			selectedDbPath = config.AppSettings.Settings ["selectedDbPath"].Value.ToString ();
+
 			if (File.Exists (selectedDbPath)) {
 				dbConn.ConnectionString = "Data Source=" + selectedDbPath;
-				buildLinksTree ();
-				fillCbFlagWithAllFlagTypes ();
-				fillLinksTreeFromDB ();
-				labelStatus.Text = selectedDbPath;
-				searchEntry.GrabFocus ();
-			} else {
-				labelStatus.Text = "You need to choose or an database!";
-			}
+				if (!doDbHasPassword ()) {
+					buildLinksTree ();
+
+					fillCbFlagWithAllFlagTypes ();
+					fillLinksTreeFromDB ();
+				
+					cbSearchFieldType.Active = 0;
+
+					//fill cbOnlySearchOnColumns
+					cbOnlySearchOnColumns.AppendText ("Title");
+					cbOnlySearchOnColumns.AppendText ("Link");
+					cbOnlySearchOnColumns.Active = 0;
+					labelStatus.Text = selectedDbPath;
+					searchEntry.GrabFocus ();
+				} else {
+					passwordDialog pwDialog = new passwordDialog (System.IO.Path.GetFileName(selectedDbPath));
+					pwDialog.ShowAll ();
+				}
+			} else labelStatus.Text = "You need to choose or an database!";
+		} else labelStatus.Text = "You need to choose or an database!";
+	}
+	public string DbSetPassword {
+		set { this.dbConn.SetPassword(value); }
+	}
+	private bool doDbHasPassword(){
+		try {
+			dbConn.Open();
+			SQLiteCommand cmd = new SQLiteCommand("select * from Links;", dbConn);
+			SQLiteDataReader reader = cmd.ExecuteReader();
+			dbConn.Close();
+			return false;
+		} catch(SQLiteException e){
+			return true;
 		}
 	}
 	private void load(){
@@ -78,6 +104,7 @@ public partial class MainWindow: Gtk.Window
 		try {
 			SQLiteCommand cmd = new SQLiteCommand(getAllFlagTypesQ, dbConn);
 			SQLiteDataReader reader = cmd.ExecuteReader();
+			cbSearchFieldType.AppendText("All");
 			while(reader.Read()){
 				cbSearchFieldType.AppendText (reader["title"].ToString());
 			}
@@ -195,17 +222,18 @@ public partial class MainWindow: Gtk.Window
 		}
 	}
 	private void _runLinkTreeSearch(){
+		string searchColumns = "title";
+		if (cbOnlySearchOnColumns.ActiveText != null)
+			searchColumns = cbOnlySearchOnColumns.ActiveText.ToLower ();
 		//run a db-search base on entry-text lookup link where title like input
-		string searchQ; 
-		if (cbSearchFieldType.ActiveText != null) {
+		string searchQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle from Links join FlagTypes on Links.flag = FlagTypes.flagid where Links."+searchColumns+" like '%" + searchEntry.Text.ToString () + "%';";
+		if (cbSearchFieldType.ActiveText != null && cbSearchFieldType.ActiveText !="All") {
 			searchQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle " +
 				"from Links " +
 				"join FlagTypes on Links.flag = FlagTypes.flagid " +
 				"where FlagTypes.title ='" + cbSearchFieldType.ActiveText + "' " +
-				"and Links.title like '%" + searchEntry.Text.ToString () + "%';";
-		} else {
-			searchQ = "select Links.linkid, Links.title, Links.link, FlagTypes.title as flagTitle from Links join FlagTypes on Links.flag = FlagTypes.flagid where Links.title like '%" + searchEntry.Text.ToString () + "%';";
-		}
+					"and Links."+searchColumns+" like '%" + searchEntry.Text.ToString () + "%';";
+		} 
 		SQLiteCommand cmd = new SQLiteCommand (searchQ, dbConn);
 		try {
 			dbConn.Open();

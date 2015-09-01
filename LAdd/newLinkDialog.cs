@@ -77,19 +77,22 @@ namespace LAdd
 		}
 		/* this method is from this blog.
 		 * http://blogs.msdn.com/b/noahc/archive/2007/02/19/get-a-web-page-s-title-from-a-url-c.aspx */
-		protected void fillCbFlagWithAllFlagTypes(){
-			dbConn.Open ();
+		private void fillCbFlagWithAllFlagTypes(){
 			String getAllFlagTypesQ = "select * from FlagTypes;";
 			try {
+				dbConn.Open ();
 				SQLiteCommand cmd = new SQLiteCommand(getAllFlagTypesQ, dbConn);
 				SQLiteDataReader reader = cmd.ExecuteReader();
+
 				while(reader.Read()){
 					cbFlag.AppendText (reader["title"].ToString());
 				}
+				if(reader.FieldCount > 0) cbFlag.Active = 0;
+				dbConn.Close ();
 			} catch (SQLiteException e){
+				dbConn.Close ();
 				Console.Write (e.ToString());
 			}
-			dbConn.Close ();
 		}
 		private bool _checkIfInputDataIsInDb(){
 			string link = entryLink.Text.Trim();
@@ -102,7 +105,6 @@ namespace LAdd
 					dbConn.Open ();
 					SQLiteDataReader reader = cmd.ExecuteReader ();
 					if (reader.Read ()) {
-						Console.WriteLine (reader ["numberOfRows"]);
 						if(Convert.ToInt32( reader["numberOfRows"]) >0){ 
 							dbConn.Close ();
 							return true;
@@ -227,7 +229,7 @@ namespace LAdd
 				enFlagtitle.GrabFocus ();
 			}
 		}
-		protected void onRemoveNewFalgType (object sender, EventArgs e)
+		protected void onRemoveFlagType (object sender, EventArgs e)
 		{
 			if (enFlagtitle.Text.Length > 0) {
 				string removeQ = "delete from FlagTypes where flagid=(select flagid from FlagTypes where title='"+enFlagtitle.Text+"');";
@@ -237,6 +239,7 @@ namespace LAdd
 					labelStatus.Text = cbFlag.ActiveText + " is removed!";
 					enFlagtitle.Text = "";
 					dbConn.Close ();
+					cbFlag.Clear ();
 					fillCbFlagWithAllFlagTypes ();
 				} else {
 					dbConn.Close ();
